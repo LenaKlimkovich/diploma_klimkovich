@@ -1,0 +1,101 @@
+.tickets__last-tickets {
+  min-height: 226px;
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+
+.tickets__last-tickets-title {
+  text-transform: uppercase;
+  margin-bottom: 9px;
+}
+
+.tickets__last-tickets-container {
+  background-color: rgba(255, 255, 255, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 161px;
+  padding: 18px 18px 14px 18px;
+  border: rgba(196, 196, 196, 1) 1px solid;
+  box-shadow: 0px 2px 2px 0px rgba(62, 60, 65, 0.25);
+}
+
+/* Верхняя часть: Направления */
+.tickets__last-tickets-route {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.tickets__last-tickets-from {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.tickets__last-tickets-to {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.tickets__last-tickets-city {
+  font-size: 18px;
+  color: rgba(41, 41, 41, 1);
+  font-weight: bold; /* Можно убрать, если в макете обычный */
+}
+
+.tickets__last-tickets-station {
+  margin-top: 1px;
+  font-size: 16px;
+  color: rgba(146, 143, 148, 1);
+}
+
+/* ---------------------------------------------------- */
+/* НИЖНЯЯ ЧАСТЬ: Иконки и Цена на одном уровне в самом низу */
+/* ---------------------------------------------------- */
+
+.tickets__last-tickets-bottom {
+  display: flex;
+  align-items: flex-end; /* Опускает и иконки, и цену строго на "пол" */
+  justify-content: space-between;
+  height: 36px; /* Уменьшили высоту под размер шрифта 36px, чтобы не было лишнего зазора */
+  width: 100%;
+}
+
+.tickets__last-tickets-amenities {
+  background-image: url('/public/assets/images/amenities.png');
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  height: 20px;
+  width: 92px;
+  flex-shrink: 0;
+}
+
+.tickets__last-tickets-price {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  font-size: 16px;
+  color: rgba(146, 143, 148, 1);
+}
+
+.tickets__last-tickets-price strong {
+  color: rgba(255, 168, 0, 1);
+  font-size: 36px;
+  margin-right: 4px;
+  margin-left: 4px;
+
+  line-height: 0.7;
+  display: inline-block;
+}
+
+.tickets__last-tickets-price img {
+  width: 20px;
+  height: 25px;
+  align-items: baseline;
+}

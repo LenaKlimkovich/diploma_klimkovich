@@ -1,0 +1,174 @@
+.confirm__container {
+  width: 100%;
+  min-height: 1080px;
+  background-color: rgba(244, 243, 246, 1);
+  position: relative;
+  z-index: 1;
+}
+
+.confirm__popup {
+  position: absolute;
+  top: -208px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1404px;
+  height: 1113px;
+  border: 1px solid rgba(196, 196, 196, 1);
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+  background-color: rgba(255, 255, 255, 1);
+  z-index: 10;
+}
+
+.popup__slogan {
+  position: absolute;
+  top: -122px;
+  font-size: 72px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 1);
+}
+
+.popup__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 148px;
+  padding: 0 82px;
+}
+
+.popup__order {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.popup__price {
+  color: rgba(146, 143, 148, 1);
+  font-size: 36px;
+  font-weight: 400;
+}
+
+.popup__price span {
+  font-weight: 700;
+  color: rgba(62, 60, 65, 1);
+  margin: 0 20px;
+}
+
+.popup__price img {
+  height: 27px;
+  width: 21px;
+}
+
+.popup__tips {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(244, 243, 246, 1);
+  width: 100%;
+  height: 312px;
+}
+
+.tips__container {
+  height: 233px;
+  width: 776px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 140px;
+}
+
+.tip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 205px;
+  height: 100%;
+}
+
+.tip:first-of-type {
+  width: 151px;
+}
+
+.tip img {
+  height: 128px;
+  width: 128px;
+  border: 13px solid white;
+  border-radius: 50%;
+}
+
+.tip p {
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(41, 41, 41, 1);
+  text-align: center;
+  height: 67px;
+}
+
+.tip span {
+  font-weight: 500;
+}
+
+.passenger__personal {
+  display: flex;
+  flex-direction: column;
+  color: rgba(41, 41, 41, 1);
+  height: 492px;
+  width: 100%;
+  padding: 95px 230px 129px 205px;
+}
+
+.passenger__name {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 51px;
+}
+
+.order__confirmation {
+  font-size: 24px;
+}
+
+.order__thank-you {
+  font-weight: 700;
+  font-size: 24px;
+  margin-top: auto;
+  margin-bottom: 0;
+}
+
+.assesment {
+  width: 100%;
+  height: 161px;
+  background-color: rgba(255, 168, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.assesment__container {
+  height: 48px;
+  width: 528px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 19px;
+  margin-left: 83px;
+}
+
+.assesment__container img {
+  width: 48px;
+  height: 100%;
+}
+
+.back-to-main {
+  width: 345px;
+  height: 60px;
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  appearance: none;
+  background-color: transparent;
+  border: 1px solid rgba(62, 60, 65, 1);
+  border-radius: 5px;
+  color: rgba(41, 41, 41, 1);
+  margin-right: 78px;
+}

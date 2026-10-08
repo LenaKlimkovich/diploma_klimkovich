@@ -1,0 +1,269 @@
+.tickets__filter {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 96px;
+  background-color: rgba(62, 60, 65, 1);
+}
+
+.tickets__filter > {
+  padding-left: 33px;
+  padding-right: 33px;
+}
+
+.tickets__filter-dates {
+  height: 281px;
+  width: 100%;
+  padding: 43px 30px 33px 30px;
+}
+
+.tickets__filter_prices {
+  height: 187px;
+}
+
+.tickets__filter_to,
+.tickets__filter_back {
+  flex-direction: column;
+
+  justify-content: space-between;
+}
+
+.filter__wrapper {
+  display: flex;
+  width: 100%;
+  min-height: 96px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tickets__filter_to,
+.tickets__filter_back,
+.tickets__filter_prices {
+  border-top: 1px solid rgba(229, 229, 229, 1);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 33px 0 33px;
+}
+
+.tickets__filter_filters {
+  height: 354px;
+  padding-left: 61px;
+  padding-right: 34px;
+  padding-top: 23px;
+  padding-bottom: 23px;
+  border-top: 1px solid rgba(229, 229, 229, 1);
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.filter__to_container span,
+.filter__back_container span {
+  font-size: 30px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 1);
+}
+
+.filter__to_container img,
+.filter__back_container img {
+  width: 32px;
+  height: 26px;
+  margin-right: 12px;
+}
+
+.filter__back_container,
+.filter__to_container {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.tickets__filter_plus {
+  width: 20px;
+  height: 20px;
+  background-image: url('/public/assets/images/filter-plus.png');
+}
+
+.tickets__filter_minus {
+  width: 20px;
+  height: 20px;
+  background-image: url('/public/assets/images/filter-minus.png');
+}
+
+.tickets__filter_plus:hover {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(93%) sepia(21%) saturate(942%) hue-rotate(325deg)
+    brightness(101%) contrast(98%);
+}
+
+.tickets__filter_prices {
+  height: 187px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.prices__title {
+  font-size: 30px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0 0 15px 0;
+}
+
+.prices__labels {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 1);
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+
+.prices__slider_container {
+  width: 100%;
+  padding: 5px 12px 5px 12px;
+  margin-bottom: 10px;
+}
+
+.custom_slider :global(.rc-slider-rail) {
+  background-color: transparent !important;
+  border: 1px solid rgba(196, 196, 196, 1);
+  height: 19px !important;
+  border-radius: 8px !important;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.custom_slider :global(.rc-slider-track) {
+  background-color: rgba(255, 168, 0, 1) !important;
+  height: 19px !important;
+  border-radius: 8px !important;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Белые круглые бегунки-ползунки */
+.custom_slider :global(.rc-slider-handle) {
+  background-color: #ffffff !important;
+  border: none !important;
+  width: 24px !important;
+  height: 24px !important;
+  opacity: 1 !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  box-shadow: none !important;
+  margin-top: 0 !important;
+  cursor: pointer;
+}
+
+/* Убираем синюю обводку при фокусе на бегунках */
+.custom_slider :global(.rc-slider-handle-click-focused) {
+  box-shadow: none !important;
+}
+
+/* ==========================================================================
+   БЛОК ЦИФР ПОД ПОЛЗУНКОМ
+   ========================================================================== */
+.prices__values {
+  display: flex;
+  position: relative;
+  width: 100%;
+  font-size: 16px;
+  color: rgba(229, 229, 229, 1);
+  font-weight: 400;
+  font-weight: 400;
+  height: 24px;
+}
+
+.prices__value_min {
+  position: absolute;
+  left: 0;
+}
+
+.prices__value_current {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.prices__value_max {
+  position: absolute;
+  right: 0;
+}
+
+.filter__icon {
+  width: 24px;
+  margin-right: 34px;
+}
+
+.filter__list {
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  gap: 28px;
+}
+
+.filter__item {
+  width: 100%;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
+}
+
+.filter__label {
+  height: inherit;
+}
+
+.filter__switcher {
+  border-radius: 10px;
+  display: flex;
+  height: 19px;
+  width: 72px;
+  display: flex;
+  background-color: rgba(255, 255, 255, 1);
+  z-index: 0;
+  align-items: center;
+}
+
+.filter__round {
+  border-radius: 50%;
+  background-color: rgba(196, 196, 196, 1);
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: transform 0.25s ease-in-out;
+}
+
+.filter__switcher_active {
+  background-color: rgba(252, 220, 157, 1);
+  justify-content: end;
+}
+
+.filter__round_active {
+  background-color: rgba(255, 168, 0, 1);
+}
+
+.time__container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 30px;
+  gap: 46px;
+}

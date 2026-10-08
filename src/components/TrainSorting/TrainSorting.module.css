@@ -1,0 +1,129 @@
+.tickets__info {
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(146, 143, 148, 1);
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.tickets__options {
+  display: flex;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown__list {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0 0;
+  border-top: none;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  background-color: rgba(247, 245, 249, 1);
+}
+
+.dropdown__item {
+  padding: 0;
+  margin: 0;
+}
+
+/* Тонкие разделительные линии между пунктами */
+.dropdown__item:not(:last-child) {
+  border-bottom: 1px solid rgba(229, 229, 229, 1);
+}
+
+.dropdown__item_btn {
+  background: none;
+  border: none;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  width: 100%;
+  height: 40px;
+  padding-left: 5px;
+  font-family: inherit;
+  font-size: inherit;
+  color: #2b2b2b;
+  cursor: pointer;
+  background-color: rgba(247, 245, 249, 1);
+}
+
+.dropdown__item_btn:hover {
+  background-color: rgba(255, 202, 98, 1);
+  color: rgba(255, 255, 255, 1);
+}
+
+.dropdown__button,
+.ticketsperpage__option {
+  background: none; /* Убирает стандартный серый фон кнопки */
+  border: none; /* Убирает рамку вокруг кнопки */
+  padding: 0; /* Убирает внутренние отступы, которые увеличивают кнопку */
+  margin: 0; /* Убирает внешние отступы */
+  color: black;
+}
+
+.dropdown__item_btn {
+  background: none; /* Убирает стандартный серый фон кнопки */
+  border: none; /* Убирает рамку вокруг кнопки */
+  padding-left: 5px; /* Убирает внутренние отступы, которые увеличивают кнопку */
+  margin: 0; /* Убирает внешние отступы */
+  color: black;
+}
+
+.dropdown__button {
+  font-size: inherit;
+}
+
+.dropdown__list {
+  position: absolute;
+  /* top: 0 совмещает верхнюю границу первой строки с закрытым текстом */
+  top: -10px;
+  /* Сдвиг влево на размер внутреннего паддинга кнопок, чтобы текст не прыгал */
+  min-width: 140px;
+  background-color: rgba(247, 245, 249, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); /* Мягкая тень вокруг плашки */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  z-index: 100;
+  border-radius: 2px;
+}
+
+.dropdown__item_btn:active {
+  background-color: rgba(255, 202, 98, 1);
+  color: rgba(255, 255, 255, 1);
+}
+
+.ticketsperpage__option {
+  color: rgba(146, 143, 148, 1);
+  font-size: inherit;
+}
+
+.tickets__sorting {
+  display: flex;
+  min-width: 233px;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+}
+
+.ticketsperpage {
+  display: flex;
+  min-width: 210px;
+  margin-left: 50px;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+}
+
+.ticketsperpage__container {
+  display: flex;
+  gap: 8px;
+}
+
+.ticketsperpage__option_active {
+  color: black;
+}

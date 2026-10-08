@@ -1,0 +1,203 @@
+.check__container {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  justify-content: center;
+  gap: 45px;
+}
+
+.check__train,
+.check__passengers,
+.check__payment {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.check__payment {
+  height: 244px;
+}
+
+.check__heading {
+  height: 95px;
+  width: 100%;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding-left: 30px;
+  border: rgba(196, 196, 196, 1) 1px solid;
+  border-bottom: none;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.check__passengers-container {
+  min-height: 218px;
+}
+
+.check__passengers-container,
+.check__payment-container {
+  width: 100%;
+  display: flex;
+  border: 1px solid rgba(196, 196, 196, 1);
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.check__payment-container {
+  height: 146px;
+  width: 100%;
+}
+
+.check__passengers-list,
+.check__payment-method {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 680px;
+  border-right: 1px dashed rgba(229, 229, 229, 1);
+}
+
+.check__payment-method {
+  height: 100%;
+  padding-left: 33px;
+  align-items: start;
+  padding-top: 44px;
+  padding-bottom: 76px;
+  font-size: 24px;
+}
+
+.check__total-container {
+  flex-grow: 1;
+  flex-shrink: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+  padding-bottom: 25px;
+}
+
+.check__total-price {
+  display: flex;
+  width: 233px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.passenger__card {
+  display: flex;
+  height: 218px;
+  width: 100%;
+  padding: 61px 150px 34px 30px;
+  border-bottom: 1px dashed rgba(229, 229, 229, 1);
+}
+
+.passenger__card-pic {
+  height: 100%;
+  min-width: 94px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  margin-right: 32px;
+}
+
+.passenger__card-pic img {
+  width: 68px;
+  height: 68px;
+}
+
+.passenger__card-pic p {
+  font-size: 18px;
+  font-weight: 400;
+  margin-top: 17px;
+}
+
+.passenger__details {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: flex-start;
+}
+
+.passenger__details p {
+  text-align: start;
+  color: rgba(146, 143, 148, 1);
+  margin-top: 0;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.passenger__full-name {
+  color: rgba(41, 41, 41, 1);
+}
+
+.passenger__btn_change {
+  width: 233px;
+  min-height: 39px;
+  background-color: rgba(255, 255, 255, 1);
+  color: rgba(41, 41, 41, 1);
+  border: 1px solid rgba(41, 41, 41, 1);
+  border-radius: 5px;
+  outline: none;
+  box-shadow: none;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 21px;
+}
+
+.passenger__btn_change:hover {
+  border: 1px solid rgba(41, 41, 41, 1);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  color: rgba(255, 168, 0, 1);
+}
+
+.passenger__btn_change:active {
+  border: none;
+  background-color: rgba(255, 168, 0, 1);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  color: rgba(41, 41, 41, 1);
+}
+
+.check__total-rubles {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.check__total-rubles span {
+  color: rgba(146, 143, 148, 1);
+}
+
+.order__confirm {
+  width: 323px;
+  min-height: 60px;
+  background-color: rgba(255, 168, 0, 1);
+  border-radius: 5px;
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 1);
+  outline: none;
+  border: none;
+  box-shadow: none;
+  text-transform: uppercase;
+  margin-top: 78px;
+}
+
+.order__confirm:hover {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.order__confirm:active {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 168, 0, 1);
+  color: rgba(255, 168, 0, 1);
+  background-color: rgba(247, 245, 249, 1);
+}
+
+.check__payment-change {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}

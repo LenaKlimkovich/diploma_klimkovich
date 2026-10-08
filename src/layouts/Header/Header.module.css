@@ -1,0 +1,166 @@
+/* ─── 3. ХЕДЕР (HEADER) ─── */
+.header {
+  position: relative;
+  width: 100%;
+  min-height: 985px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.header__home::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-image: url('/public/assets/images/header-background-home.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  pointer-events: none;
+}
+
+.header__other {
+  min-height: 596px; /* ОБЯЗАТЕЛЬНО сбрасываем минимальную высоту базового класса */
+  height: 596px;
+}
+
+.header__confirm {
+  min-height: 834px;
+}
+
+.header__other::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-image: url('/public/assets/images/header-background-other.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  pointer-events: none;
+}
+
+.header__confirm::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-image: url('/public/assets/images/header-background-confirm.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  pointer-events: none;
+}
+
+.header > * {
+  position: relative;
+  z-index: 2;
+}
+
+.header__top-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  width: 100%;
+}
+
+.header__logo {
+  margin-top: 15px;
+  width: 100%;
+  height: 49px;
+  color: white;
+  font-size: 36px;
+  font-weight: 900;
+  display: flex;
+  padding-left: 256px;
+  align-items: center;
+  justify-content: left;
+}
+
+.header__navigation {
+  width: 100%;
+  height: 94px;
+  background: rgba(41, 41, 41, 1);
+  display: flex;
+  justify-content: start;
+  margin-top: 15px;
+}
+
+.menu {
+  display: flex;
+  list-style: none;
+  width: 100%;
+  margin: 0;
+  padding-left: 258px;
+  align-items: center;
+  justify-content: start;
+  gap: 80px;
+}
+
+.menu__link {
+  color: rgba(255, 255, 255, 1);
+  text-decoration: none;
+  font-size: 30px;
+  font-weight: 300;
+}
+
+.menu__link:hover {
+  opacity: 0.8;
+}
+
+.header__bottom-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 574px;
+  width: 100%;
+}
+
+.header__bottom-container-home {
+  display: flex;
+  align-items: center;
+  height: 574px;
+  width: 100%;
+  padding-left: 349px;
+  padding-right: 232px;
+  margin-top: auto;
+}
+
+.header__bottom-container-other {
+  display: flex;
+  align-items: end;
+  height: 574px;
+  width: 100%;
+  padding-left: 215px;
+  padding-right: 215px;
+}
+
+.header__slogan {
+  font-size: 72px;
+  color: rgba(255, 255, 255, 1);
+  height: 170px;
+  font-weight: 100;
+  text-align: start;
+}
+
+.header__slogan strong {
+  font-weight: 700;
+}
+
+.header__underline {
+  width: 100%;
+  height: 8px;
+  margin: 0px;
+  background-color: rgba(255, 168, 0, 1);
+}

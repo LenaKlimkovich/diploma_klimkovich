@@ -1,0 +1,21 @@
+.seats-selection__next {
+  background-color: rgba(255, 168, 0, 1);
+  color: rgba(255, 255, 255, 1);
+  font-size: 24px;
+  text-transform: uppercase;
+  border-radius: 5px;
+  width: 222px;
+  height: 60px;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  margin-top: auto;
+}
+
+.seats-selection__title {
+  margin-bottom: 48px;
+  height: 43px;
+  width: 100%;
+  text-align: left;
+  text-transform: uppercase;
+}

@@ -1,0 +1,242 @@
+.ticket {
+  margin-top: 47px;
+  height: 354px;
+  width: 100%;
+  margin-top: 47px;
+  display: flex;
+  border: 1px solid rgba(196, 196, 196, 1);
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.3);
+}
+
+.ticket_check {
+  margin-top: 0;
+  border-left: none;
+}
+
+.ticket__left {
+  width: 197px;
+  background-color: rgba(228, 224, 233, 1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  padding: 0 18px 0 25px;
+}
+
+.ticket__train_number {
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(41, 41, 41, 1);
+}
+
+.ticket__route_cities {
+  width: 153px;
+  line-height: 1.3;
+}
+
+.ticket__center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Строка рейса (ТУДА или ОБРАТНО) */
+/* Контейнер строки (Рейс туда или обратно) */
+.ticket__route_row {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ЛЕВЫЙ БЛОК (Отправление) */
+.ticket__time_block:first-child {
+  flex: 1;
+  min-width: 194px;
+  padding-left: 39px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+/* ЦЕНТРАЛЬНЫЙ БЛОК (Длительность и Стрелка) */
+.ticket__duration_block {
+  flex: 1;
+  /* Компактная фиксированная ширина для стрелки и времени */
+  min-width: 46px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Центрирует время "9:42" и стрелочку друг под другом */
+  justify-content: center;
+  /* Небольшой зазор между левым текстом и стрелкой */
+}
+
+/* ПРАВЫЙ БЛОК (Прибытие) */
+.ticket__time_block:last-child {
+  min-width: 234px;
+  flex: 1; /* Автоматически занимает ВСЁ оставшееся место справа под длинные названия */
+  padding-left: 40px; /* Отступ от стрелочки до начала текста прибытия */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Текст прижимается к левому краю, как на макете */
+}
+
+.ticket__icon {
+  height: 86px;
+  width: 86px;
+  color: rgba(255, 255, 255, 1);
+  border: 2px solid rgba(255, 255, 255, 1);
+  border-radius: 50%;
+  background-image: url('/public/assets/images/train.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  background-color: rgba(228, 224, 233, 1);
+}
+
+.ticket__right {
+  width: 283px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 41px 21px 20px 30px;
+  border-left: rgba(229, 229, 229, 1) 1px dashed;
+}
+
+.ticket__seat_rubble {
+  margin-left: 5px;
+  width: 16px;
+  height: 19px;
+}
+
+.ticket__btn {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-top: 18px;
+  width: 228px;
+  min-height: 39px;
+  background-color: rgba(255, 168, 0, 1);
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 1);
+  font-weight: 700;
+  text-align: center;
+}
+
+.ticket__prices_list {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ticket__seat_count {
+  color: rgba(255, 168, 0, 1);
+  font-size: 16px;
+  font-weight: 500;
+  margin-left: 10px;
+  margin-right: 15px;
+}
+
+.ticket__seat_type {
+  display: inline-block;
+  color: rgba(62, 60, 65, 1);
+  font-size: 16px;
+  font-weight: 400;
+  width: 80px;
+}
+
+.ticket__seat_price {
+  color: rgba(146, 143, 148, 1);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.ticket__seat_price strong {
+  color: rgba(45, 43, 47, 1);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.ticket__amenities {
+  width: 92px;
+  height: 20px;
+  margin-top: 31px;
+  align-self: flex-end;
+}
+
+.ticket__price_row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.ticket__time {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.ticket__city {
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 1);
+}
+
+.ticket__city {
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(146, 143, 148, 1);
+}
+
+.ticket__duration_text {
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: rgba(196, 196, 196, 1);
+}
+
+.ticket__btn:hover {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.ticket__btn:active {
+  color: rgba(255, 168, 0, 1);
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(255, 168, 0, 1);
+  box-shadow: none;
+}
+
+.ticket__btn_change {
+  width: 233px;
+  min-height: 39px;
+  background-color: rgba(255, 255, 255, 1);
+  color: rgba(41, 41, 41, 1);
+  border: 1px solid rgba(41, 41, 41, 1);
+  border-radius: 5px;
+  outline: none;
+  box-shadow: none;
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 15px;
+}
+
+.ticket__btn_change:hover {
+  border: 1px solid rgba(41, 41, 41, 1);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  color: rgba(255, 168, 0, 1);
+}
+
+.ticket__btn_change:active {
+  border: none;
+  background-color: rgba(255, 168, 0, 1);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  color: rgba(41, 41, 41, 1);
+}

@@ -1,0 +1,252 @@
+.main-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.main-page__about-us {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  width: 100%;
+  margin: 0 auto;
+  line-height: 1.2;
+  padding-left: 252px;
+  padding-right: 314px;
+  padding-top: 144px;
+  padding-bottom: 91px;
+}
+
+.main-page__title {
+  font-size: 36px;
+  font-weight: 500;
+  margin-bottom: 66px;
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  text-transform: uppercase;
+}
+
+.main-page__how {
+  width: 100%;
+  height: 575px;
+  display: flex;
+  flex-direction: column;
+  padding-left: 252px;
+  padding-right: 268px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.main-page__how::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-image: url('/public/assets/images/how-it-works.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  pointer-events: none;
+}
+
+.main-page__how > * {
+  position: relative;
+  z-index: 5;
+}
+
+.how__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 60px;
+  color: rgba(255, 255, 255, 1);
+}
+
+.how__bottom {
+  display: flex;
+  gap: 100px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.how__advantage {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.how__advantage-order,
+.how__advantage-office,
+.how__advantage-selection {
+  width: 162px;
+  height: 162px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.how__advantage-order {
+  background-image: url('/public/assets/images/order.png');
+}
+
+.how__advantage-office {
+  background-image: url('/public/assets/images/office.png');
+}
+
+.how__advantage-selection {
+  background-image: url('/public/assets/images/selection.png');
+}
+
+.how__advantage-text {
+  font-size: 24px;
+  color: #ffffff;
+  font-weight: 300;
+  margin-top: 30px;
+  max-width: 280px;
+}
+
+.main-page__text {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+
+.main-page__text:last-child {
+  margin-bottom: 0;
+}
+
+.main-page__about-container {
+  display: flex;
+  flex-direction: column;
+  border-left: 9px solid rgba(255, 168, 0, 1);
+  padding-left: 15px;
+  gap: 15px;
+}
+
+.main-page__more-button {
+  font-size: 24px;
+  font-weight: 700;
+  width: 325px;
+  height: 60px;
+  border: 1px solid rgba(255, 255, 255, 1);
+  color: rgba(255, 255, 255, 1);
+  border-radius: 5px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+@media (hover: hover) {
+  .main-page__more-button:hover,
+  .subscribe-form__submit:hover {
+    background-color: rgba(255, 202, 98, 1);
+    color: rgba(45, 43, 47, 1);
+    border-color: rgba(255, 202, 98, 1);
+  }
+
+  .main-page__more-button:active,
+  .subscribe-form__submit:active {
+    background-color: rgba(255, 255, 255, 1);
+    border-color: rgba(230, 175, 75, 1);
+    color: rgba(45, 43, 47, 1);
+  }
+}
+
+.main-page__feedback {
+  width: 100%;
+  min-height: 748px;
+  padding-left: 252px;
+  padding-right: 261px;
+  padding-top: 152px;
+  padding-bottom: 122px;
+  display: flex;
+  flex-direction: column;
+  color: rgba(41, 41, 41, 1);
+}
+
+.feedback-card__dots {
+  width: 140px;
+  height: 19px;
+  margin: auto auto 0;
+}
+
+.feedback-container {
+  display: flex;
+  gap: 40px;
+  margin-top: 50px;
+  width: 100%;
+}
+
+.feedback {
+  flex: 1;
+  height: 206px;
+  background-color: rgba(245, 245, 245, 1);
+  border-radius: 5px;
+}
+
+.main-page__feedback-container {
+  display: flex;
+  justify-content: start;
+  gap: 85px;
+}
+
+.feedback-card {
+  width: 610px;
+  gap: 19px;
+  display: flex;
+}
+
+.feedback-card_img {
+  width: 206px;
+  height: 207px;
+  display: flex;
+}
+
+.feedback-card_content {
+  display: flex;
+  position: relative;
+  padding: 0;
+}
+
+.quotation-start,
+.quotation-end {
+  width: 8px;
+  height: 8px;
+}
+
+.feedback-card_container {
+  display: flex;
+  flex-direction: column;
+}
+
+.feedback-card__text {
+  margin: 0;
+  line-height: 1.5;
+  color: rgba(146, 143, 148, 1);
+}
+
+.quotation-mark {
+  display: inline-block;
+  vertical-align: top;
+  width: 15px;
+  height: auto;
+}
+
+.quotation-mark--start {
+  margin-right: 6px;
+}
+
+.quotation-mark--end {
+  margin-left: 6px;
+}

@@ -1,0 +1,431 @@
+/* Растягиваем обертку инпутов на полную ширину */
+.ticket-form__dates_home,
+.ticket-form__dates_tickets_page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 60px;
+  gap: 40px;
+}
+
+.ticket-form__dates_sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.ticket-form__date_title {
+  font-size: 30px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
+  margin-bottom: 18px;
+  height: auto;
+  padding: 0 !important;
+}
+
+.ticket-form__field {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  overflow: hidden;
+}
+
+.ticket-form__input {
+  width: 100%;
+  height: 60px;
+  line-height: 60px; /* Идеально центрирует текст по вертикали без флексов */
+
+  text-align: left;
+  padding-left: 22px;
+  padding-right: 55px; /* Защита от наплывания текста на иконку календаря */
+
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(41, 41, 41, 1);
+  box-sizing: border-box; /* Важно: паддинги не будут раздувать инпут шире 100% */
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+  background-color: #ffffff;
+  border-radius: 3px;
+  outline: none;
+  box-shadow: none;
+}
+
+.ticket-form__input:focus {
+  border-color: #ffa800;
+}
+
+.ticket-form__icon-calendar {
+  position: absolute !important;
+  right: 12px;
+  bottom: 0 !important;
+  transform: translateY(-50%) !important;
+  width: 20px;
+  height: 22px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.ticket-form__dates_home .ticket-form__icon-calendar,
+.ticket-form__dates_tickets_page .ticket-form__icon-calendar {
+  top: 50% !important;
+  bottom: auto !important;
+  transform: translateY(-50%) !important;
+}
+
+/* Стилизация плейсхолдеров для обычного инпута и для инпута даты */
+.ticket-form__input::placeholder,
+.ticket-form__input_type_date::placeholder {
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(229, 229, 229, 1);
+}
+
+.sidebar.ticket-form__input_type_date::placeholder,
+.tickets_page.ticket-form__input_type_date::placeholder {
+  color: transparent;
+  opacity: 0;
+}
+
+.tickets_page.ticket-form__input_type_date,
+.home.ticket-form__input_type_date {
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  padding-left: 19px;
+  padding-right: 55px;
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(41, 41, 41, 1);
+  border: 1px solid #e5e5e5;
+  background-color: #ffffff;
+  border-radius: 3px;
+  outline: none;
+  box-shadow: none;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.sidebar.ticket-form__input_type_date {
+  height: 43px;
+  width: 100%;
+  padding-left: 8px;
+  border-radius: 3px;
+  outline: none;
+  box-shadow: none;
+  font-size: 18px;
+}
+
+.ticket-form__input-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.ticket-form__input-wrapper :global(.react-datepicker-wrapper) {
+  position: relative;
+  width: 352px;
+  height: 60px;
+}
+
+:global(.react-datepicker__header.react-datepicker__header--custom) {
+  padding: 10px 0 !important;
+  height: 60px !important;
+}
+
+.ticket-form__dates_sidebar :global(.react-datepicker-wrapper) {
+  height: 43px !important;
+}
+
+.ticket-form__input-wrapper :global(.react-datepicker-wrapper) {
+  position: relative;
+  width: 100%;
+  height: 60px;
+}
+
+:global(.react-datepicker-wrapper) {
+  width: 352px !important;
+  height: 100% !important;
+}
+
+:global(.react-datepicker__input-container) {
+  width: 100% !important;
+  height: 100% !important;
+  position: relative !important;
+  border-radius: 3px !important;
+  font-size: 18px;
+}
+
+.home.ticket-form__input_type_date :global(.react-datepicker-popper),
+.tickets_page.ticket-form__input_type_date :global(.react-datepicker-popper) {
+  z-index: 100 !important;
+  padding-top: 0 !important;
+  margin-top: 4px !important;
+  height: 302px !important;
+  width: 352px !important;
+  position: absolute !important;
+  top: -140px !important;
+}
+
+.sidebar.ticket-form__input_type_date :global(.react-datepicker-popper) {
+  z-index: 999999 !important; /* Выталкиваем календарь на самый передний план */
+  background-color: #ffffff !important;
+  opacity: 1 !important;
+  padding-top: 0 !important;
+  margin-top: 4px !important;
+  height: 302px !important;
+  width: 352px !important;
+  position: absolute !important;
+  bottom: 4px !important;
+}
+
+.ticket-form__dates_home :global(.react-datepicker) {
+  font-family: inherit;
+  width: 352px !important;
+  min-height: 302px !important;
+  background-color: #ffffff !important;
+  border-radius: 4px !important;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  position: absolute;
+  top: -130px;
+  left: -11px !important;
+}
+
+.ticket-form__dates_sidebar :global(.react-datepicker) {
+  font-family: inherit;
+  width: 352px !important;
+  height: 302px !important;
+  background-color: #ffffff !important;
+  border-radius: 4px !important;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  position: absolute;
+  left: calc(0% - 24px);
+}
+
+:global(.react-datepicker__month-container) {
+  width: 100% !important;
+  height: 100% !important;
+  float: none !important;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+:global(.react-datepicker__week)
+  > :global(.react-datepicker__day:nth-child(7)) {
+  font-weight: 700 !important;
+}
+
+:global(.react-datepicker__week)
+  > :global(.react-datepicker__day--disabled:nth-child(7)) {
+  font-weight: 600 !important;
+}
+
+:global(.react-datepicker__navigation) {
+  top: 18px !important;
+}
+:global(.react-datepicker__navigation--previous) {
+  left: 18px !important;
+}
+:global(.react-datepicker__navigation--next) {
+  right: 18px !important;
+}
+
+:global(.react-datepicker__day-names) {
+  display: none !important;
+}
+
+:global(.react-datepicker__month) {
+  margin-top: 0 !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+:global(.react-datepicker__day) {
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  color: #292929 !important;
+  width: 38px !important;
+  line-height: 38px !important;
+  margin: 2px !important;
+  box-sizing: border-box;
+}
+
+:global(.react-datepicker__week) {
+  display: flex;
+  font-size: 14px !important;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px !important;
+}
+
+/* Эффект ховера */
+:global(.react-datepicker__day:hover) {
+  background-color: #f0f4fc !important;
+  color: #292929 !important;
+  border: none !important;
+}
+
+/* ВЫБРАННЫЙ ДЕНЬ (Оранжевая квадратная рамка, как число 30 на вашем изображении) */
+:global(.react-datepicker__day--selected),
+:global(.react-datepicker__day--keyboard-selected) {
+  background-color: rgba(
+    252,
+    220,
+    157,
+    1
+  ) !important; /* Светлый кремовый фон */
+  border: 2px solid #ffa800 !important; /* Оранжевый контур */
+  color: #292929 !important;
+}
+
+:global(.react-datepicker__day--outside-month),
+:global(.react-datepicker__day--outside-month.react-datepicker__day--disabled) {
+  color: rgba(229, 229, 229, 1) !important;
+  background: none !important;
+  font-weight: 400 !important;
+  cursor: default !important;
+}
+
+:global(.react-datepicker__month) {
+  padding: 0px !important;
+  margin: 0px !important;
+}
+
+:global(.react-datepicker__day--disabled):not(
+  :global(.react-datepicker__day--outside-month)
+) {
+  color: rgba(41, 41, 41, 1) !important;
+  opacity: 0.8 !important;
+  cursor: not-allowed;
+  background: none !important;
+}
+
+:global(.react-datepicker__day--outside-month) {
+  color: rgba(229, 229, 229, 1) !important;
+  background: none !important;
+}
+
+:global(.react-datepicker__day--disabled) {
+  color: rgba(41, 41, 41, 1) !important;
+  font-weight: 100 !important;
+  cursor: pointer !important;
+}
+
+/* Перебиваем инлайн-координаты библиотеки через наш уникальный класс */
+.ticket-form__calendar-popper {
+  position: absolute !important;
+  z-index: 100 !important;
+  width: 352px !important;
+}
+
+.ticket-form__calendar-popper :global(.react-datepicker-popper) {
+  position: absolute !important;
+}
+
+.ticket-form__custom-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 25px !important;
+  font-weight: 600;
+  gap: 24px;
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.ticket-form__current-month-text {
+  font-size: 25px;
+  font-weight: 500;
+  color: black;
+  min-width: 100px;
+}
+
+/* Сбрасываем абсолютные стили библиотеки для стрелок и делаем их обычными кнопками */
+.ticket-form__nav-btn {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: 24px; /* Размер стрелочек */
+  color: #a0a0a0; /* Цвет стрелочек как на макете */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  position: static !important; /* Отменяет absolute-позиционирование библиотеки */
+  transform: none !important;
+  transition: color 0.2s ease;
+}
+
+.ticket-form__nav-btn:hover {
+  color: #292929; /* Темнеют при наведении */
+}
+
+/* Принудительно отключаем дефолтные иконки-стрелки самой библиотеки, если они где-то вылезают */
+:global(.react-datepicker__navigation) {
+  display: none !important;
+}
+
+.ticket-form__nav-btn {
+  background: none;
+  border: none;
+  font-size: 12px; /* Уменьшите или увеличьте размер треугольника */
+  color: rgb(2, 2, 2); /* Цвет стрелочки */
+  cursor: pointer;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+:global(.react-datepicker__week:nth-child(6)) {
+  display: none !important;
+}
+
+.ticket-form__custom-header-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.ticket-form__calendar-arrow {
+  position: absolute;
+  /* Выталкиваем строго наверх над белым контейнером */
+  top: -33px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  /* Рисуем треугольник */
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 13px solid rgba(255, 255, 255, 1);
+
+  width: 0;
+  height: 0;
+  display: block;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Дописываем оборванное свойство кнопок из вашего кода */
+.ticket-form__nav-btn {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  cursor: pointer;
+}

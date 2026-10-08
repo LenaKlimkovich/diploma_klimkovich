@@ -1,0 +1,242 @@
+.trip-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 360px;
+  min-height: 1279px;
+  background-color: #3e3c41;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+.trip-details__title {
+  min-height: 108px;
+  width: 100%;
+  padding-left: 43px;
+  padding-right: 43px;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+}
+
+.trip-details__muted-text {
+  color: #928f94;
+}
+
+.trip-details__section {
+  border-top: 1px solid rgba(229, 229, 229, 1);
+  padding: 22px 26px 0 26px;
+}
+
+.trip-details__section.trip-details__section-to {
+  padding-bottom: 53px;
+}
+
+.trip-details__section.trip-details__section-back {
+  padding-bottom: 34px;
+}
+
+.trip-details__section.trip-details__section-passengers {
+  padding-bottom: 46px;
+  max-height: 196px;
+}
+
+.trip-details__section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 33px;
+}
+
+.trip-details__header-left {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.trip-details__section-title {
+  margin: 0;
+  line-height: 1;
+}
+
+.trip-details__section-date {
+  font-size: 18px;
+  display: flex;
+  align-items: flex-end;
+  color: rgba(255, 255, 255, 1);
+
+  line-height: 1;
+}
+
+/* ==========================================================================
+   4. ИКОНКИ И УПРАВЛЯЮЩИЕ КНОПКИ (+ / -)
+   ========================================================================== */
+.trip-details__icon-arrow {
+  border-radius: 5px;
+  width: 32px;
+  height: 26px;
+  align-self: baseline;
+}
+
+.trip-details__icon-passenger {
+  width: 26px;
+  height: 26px;
+}
+
+.trip-details__btn-minus {
+  background-image: url('/public/assets/images/filter-minus.png');
+}
+
+.trip-details__btn-plus {
+  background-image: url('/public/assets/images/filter-plus.png');
+}
+
+.trip-details__btn-plus,
+.trip-details__btn-minus {
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  background-position: center;
+  background-size: contain;
+}
+
+/* ==========================================================================
+   5. ВНУТРЕННИЙ КОНТЕНТ СЕКЦИЙ И СТРОКИ ИНФО
+   ========================================================================== */
+.trip-details__section-content {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+}
+
+.trip-details__info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 22px;
+  font-size: 18px;
+  color: rgba(229, 229, 229, 1);
+  line-height: 1;
+}
+
+.trip-details__train-number {
+  color: rgba(255, 255, 255, 1);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   6. ТРЕХКОЛОНОЧНАЯ СЕТКА МАРШРУТА
+   ========================================================================== */
+.trip-details__route-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  column-gap: 16px;
+  margin-top: 53px;
+  align-items: flex-start;
+}
+
+/* Левая и правая текстовые колонки */
+.trip-details__route-time-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.trip-details__text-right {
+  text-align: right;
+  align-items: flex-end;
+  font-size: 16px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 1);
+}
+
+/* Центральная колонка (время в пути + стрелочка) */
+.trip-details__center-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative; /* Добавлено для точного позиционирования надписи */
+}
+
+.trip-details__duration {
+  color: rgba(229, 229, 229, 1);
+  font-size: 18px;
+  position: absolute; /* Вырываем текст из потока */
+  top: -25px; /* Намертво прижимаем к самому верху сетки */
+  white-space: nowrap;
+}
+
+.trip-details__arrow-line {
+  width: 30px;
+  height: 20px;
+  object-fit: contain;
+  margin-top: 5px;
+}
+
+/* Элементы текстовых блоков маршрута */
+.trip-details__time {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.trip-details__date {
+  font-size: 18px;
+  color: rgba(146, 143, 148, 1);
+  margin-bottom: 8px;
+}
+
+.trip-details__city {
+  font-size: 18px;
+  font-weight: 400;
+  margin-top: 20px;
+}
+
+.trip-details__station {
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(146, 143, 148, 1);
+}
+
+/* ==========================================================================
+   7. СТОИМОСТЬ И ФИНАЛЬНЫЙ БЛОК ИТОГО
+   ========================================================================== */
+.trip-details__price-row {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.trip-details__ruble {
+  color: #928f94;
+  font-weight: 400;
+}
+
+.trip-details__total-block {
+  border-top: 1px solid #e5e5e5;
+  padding: 32px 27px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 109px;
+}
+
+.trip-details__total-title {
+  text-transform: uppercase;
+}
+
+.trip-details__total-price {
+  font-size: 48px;
+  font-weight: 700;
+  color: rgba(255, 168, 0, 1);
+}
+
+.trip-details__ruble--large {
+  font-size: 46px;
+  color: rgba(229, 229, 229, 1);
+  font-weight: 100;
+}

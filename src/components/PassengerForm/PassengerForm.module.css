@@ -1,0 +1,412 @@
+.passenger {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 45px;
+}
+
+.passenger__card {
+  display: flex;
+  flex-direction: column;
+  max-height: 830px;
+  background-color: #ffffff;
+  border: 1px solid rgba(196, 196, 196, 1);
+  border-radius: 4px;
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+}
+
+.passenger__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 43px;
+  padding-left: 23px;
+  border-bottom: 1px dashed rgba(146, 143, 148, 1);
+  height: 107px;
+  background-color: rgba(249, 249, 249, 1);
+}
+
+.passenger__card:last-child {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ИСПРАВЛЕНО: Если нужно убрать пунктир в шапке ТОЛЬКО у последнего пассажира */
+.passenger__header:last-of-type {
+  border-bottom: none;
+}
+
+.passenger__header-title {
+  font-weight: 400;
+  color: rgba(41, 41, 41, 1);
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  height: 107px;
+  width: auto;
+}
+
+.passenger__icon-plus,
+.passenger__icon-minus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(255, 168, 0, 1);
+  color: rgba(255, 168, 0, 1);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.passenger__icon-minus {
+  border: 2px solid rgba(146, 143, 148, 1);
+  color: rgba(146, 143, 148, 1);
+}
+
+.passenger__icon-plus:hover {
+  border: none;
+}
+
+.passenger__btn_close {
+  background: none;
+  border: none;
+  padding: 0;
+  color: rgba(146, 143, 148, 1);
+  cursor: pointer;
+  font-size: 25px;
+}
+
+.passenger__content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Кастомный Селект */
+.passenger__select_wrapper {
+  position: relative;
+  width: 280px;
+  height: 50px;
+  margin: 38px 36px;
+}
+
+.passenger__select_trigger {
+  border-radius: 5px;
+  border: 1px solid rgba(146, 143, 148, 1);
+  padding: 10px 15px;
+  font-size: 24px;
+  color: #292929;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background-color: #ffffff;
+  height: 100%;
+}
+
+.passenger__select_arrow {
+  font-size: 10px;
+  color: #928f94;
+}
+
+.passenger__dropdown {
+  position: absolute;
+  top: 0%;
+  left: 0;
+  width: 100%;
+  background: rgba(244, 243, 246, 1);
+
+  border-radius: 5px;
+  z-index: 10;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.passenger__dropdown_item {
+  padding: 10px 15px;
+  font-size: 24px;
+  color: #292929;
+  background-color: rgba(244, 243, 246, 1);
+  cursor: pointer;
+  border-bottom: rgba(196, 196, 196, 1) 1px solid;
+}
+
+.passenger__dropdown:last-child {
+  border-bottom: none;
+}
+
+/* Сетки полей */
+.passenger__grid_three {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 25px;
+  margin: 7px 35px;
+}
+
+.passenger__grid_flex {
+  display: flex;
+  gap: 35px;
+  margin: 45px 36px;
+}
+
+.passenger__input_group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.passenger__label {
+  font-size: 16px;
+  color: rgba(146, 143, 148, 1);
+}
+
+.passenger__label.passenger__label_adult {
+  width: 444px;
+}
+
+.passenger__input,
+.passenger__input_short {
+  border: 1px solid rgba(146, 143, 148, 1);
+  border-radius: 5px;
+  padding-left: 15px;
+  font-size: 24px;
+  color: rgba(41, 41, 41, 1);
+  outline: none;
+  height: 50px;
+  width: 100%;
+  white-space: pre-line;
+}
+
+.passenger__input_wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.passenger__custom_placeholder {
+  position: absolute;
+  top: 50%;
+  left: 9px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  color: rgba(196, 196, 196, 1);
+  pointer-events: none;
+}
+
+.passenger__sub_text {
+  font-size: 19px;
+  margin-top: -15px;
+  margin-bottom: -5px;
+}
+
+.passenger__input_short {
+  width: 240px;
+  border: 1px solid rgba(146, 143, 148, 1);
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.passenger__input_short::placeholder {
+  font-size: 18px;
+  color: rgba(196, 196, 196, 1);
+}
+
+.passenger__error_message {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding-left: 24px;
+  font-size: 18px;
+  font-weight: 400;
+  width: 100%;
+  height: 119px;
+  bottom: 0px;
+  background-color: rgba(255, 61, 0, 0.38);
+  text-align: left;
+}
+
+.passenger__error_message strong {
+  font-weight: 700;
+  display: flex;
+}
+
+.passenger__error_close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.81);
+  color: rgba(255, 61, 0, 0.38);
+  font-size: 18px;
+  transform: rotate(45%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.passenger__error_text {
+  width: 65%;
+}
+
+.passenger__gender_toggle {
+  display: flex;
+  border: 1px solid rgba(146, 143, 148, 1);
+  border-radius: 5px;
+  overflow: hidden;
+  width: 100%;
+  height: 50px;
+  margin-top: 10px;
+}
+
+.passenger__input_gender {
+  width: 204px;
+}
+
+.passenger__input_birth {
+  display: flex;
+  flex-direction: column;
+}
+
+.passenger__gender_btn {
+  flex: 1;
+  background: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 900;
+  cursor: pointer;
+  outline: none;
+}
+
+.passenger__gender_btn--active {
+  background-color: #ffa800;
+  color: #292929;
+}
+
+.passenger__checkbox_label {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 18px;
+  color: #292929;
+  cursor: pointer;
+  margin-left: 36px;
+  margin-bottom: 33px;
+  height: 28px;
+}
+
+.passenger__checkbox {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #c4c4c4;
+  border-radius: 4px;
+}
+
+/* Сетка документов */
+.passenger__grid_docs {
+  border-top: 1px dashed rgba(146, 143, 148, 1);
+  border-bottom: 1px dashed rgba(146, 143, 148, 1);
+  padding: 36px;
+  width: 100%;
+}
+
+.passenger__grid_adult {
+  display: grid;
+  grid-template-columns: repeat(3, 205px);
+  gap: 35px;
+}
+
+.passenger__grid_child {
+  display: grid;
+  grid-template-columns: 444px 207px;
+  gap: 35px;
+}
+
+.passenger__next {
+  width: 303px;
+  height: 52px;
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(41, 41, 41, 1);
+  border-radius: 5px;
+  border: 1px solid rgba(41, 41, 41, 1);
+  align-self: end;
+  background-color: rgba(255, 255, 255, 1);
+  margin: 37px 30px 28px 0;
+}
+
+.passenger__next_valid {
+  width: 303px;
+  height: 52px;
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(41, 41, 41, 1);
+  border-radius: 5px;
+  border: 1px solid rgba(41, 41, 41, 1);
+  align-self: end;
+  background-color: rgba(178, 246, 161, 1);
+  margin: 37px 30px 28px 0;
+}
+
+.passenger__add {
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 97px;
+  background-color: #ffffff;
+  border: 1px solid rgba(196, 196, 196, 1);
+  border-radius: 4px;
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+  padding-left: 26px;
+  padding-right: 38px;
+}
+
+.passenger__btn_add {
+  color: rgba(255, 168, 0, 1);
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-size: 30px;
+  cursor: pointer;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.card__footer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: end;
+}
+
+.card__footer_valid {
+  background-color: rgba(178, 246, 161, 1);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card__ready {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 1);
+}
+
+.ready__img {
+  background-image: url('/public/assets/images/ready.png');
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-left: 24px;
+  margin-right: 15px;
+}

@@ -1,0 +1,70 @@
+/* Контейнер для всех шагов */
+.order-steps {
+  display: flex;
+  width: 100%;
+  height: 98px;
+}
+
+.step {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+
+  background-color: rgba(62, 60, 65, 1);
+  color: rgba(255, 255, 255, 1);
+  font-weight: 700;
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - 37px) 0%,
+    100% 50%,
+    calc(100% - 37px) 100%,
+    0% 100%,
+    37px 50%
+  );
+  &.step-active,
+  &.step-past {
+    background-color: rgba(255, 168, 0, 1);
+    color: #fff;
+  }
+}
+
+.step__name {
+  font-size: 30px;
+}
+
+.step__number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 1);
+  background-color: transparent;
+  font-size: 36px;
+  margin-right: 21px;
+}
+
+.step:first-child {
+  min-width: 620px;
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - 37px) 0%,
+    100% 50%,
+    calc(100% - 37px) 100%,
+    0% 100%
+  );
+}
+
+.step:not(:first-child) {
+  margin-left: -36px;
+  justify-content: start;
+  padding-left: 74px;
+}
+
+.step:last-child {
+  min-width: 616px;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 37px 50%);
+}

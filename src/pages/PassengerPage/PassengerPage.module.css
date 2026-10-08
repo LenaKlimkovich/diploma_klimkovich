@@ -1,0 +1,46 @@
+.passengers__container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 103px;
+  align-items: end;
+}
+
+.passenger__next-step:disabled {
+  text-align: center;
+  width: 222px;
+  height: 60px;
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 1);
+  text-transform: uppercase;
+  border-radius: 5px;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  -webkit-appearance: none;
+  appearance: none;
+
+  background-color: rgba(146, 143, 148, 1);
+}
+
+.passenger__next-step:enabled {
+  text-align: center;
+  width: 222px;
+  height: 60px;
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 168, 0, 1);
+  text-transform: uppercase;
+  border-radius: 5px;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  -webkit-appearance: none;
+  appearance: none;
+}

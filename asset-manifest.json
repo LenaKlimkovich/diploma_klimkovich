@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/diploma_klimkovich/static/css/main.3702df9d.css",
+    "main.js": "/diploma_klimkovich/static/js/main.786133b7.js",
+    "static/js/453.326161c2.chunk.js": "/diploma_klimkovich/static/js/453.326161c2.chunk.js",
+    "static/media/header-background-confirm.png": "/diploma_klimkovich/static/media/header-background-confirm.b11ad8ddbb71924f6a2b.png",
+    "static/media/header-background-home.png": "/diploma_klimkovich/static/media/header-background-home.2b1d57b94c1d7f95503e.png",
+    "static/media/how-it-works.png": "/diploma_klimkovich/static/media/how-it-works.cde14521b93bb76bbf19.png",
+    "static/media/header-background-other.png": "/diploma_klimkovich/static/media/header-background-other.fb28410b5b3cdc756688.png",
+    "static/media/loading.gif": "/diploma_klimkovich/static/media/loading.4e2e699c349a7e5f3147.gif",
+    "static/media/air-conditioning.svg": "/diploma_klimkovich/static/media/air-conditioning.da1a86d68c22c36dd8d2.svg",
+    "static/media/bedding-black.svg": "/diploma_klimkovich/static/media/bedding-black.700e6913e3443ce5b9dd.svg",
+    "static/media/rocket.svg": "/diploma_klimkovich/static/media/rocket.01dc42298a6d083f49f7.svg",
+    "static/media/wi-fi-black.svg": "/diploma_klimkovich/static/media/wi-fi-black.1414f5985ef78c78e28d.svg",
+    "static/media/wi-fi.svg": "/diploma_klimkovich/static/media/wi-fi.5721486762f1be6d9db2.svg",
+    "index.html": "/diploma_klimkovich/index.html",
+    "main.3702df9d.css.map": "/diploma_klimkovich/static/css/main.3702df9d.css.map",
+    "main.786133b7.js.map": "/diploma_klimkovich/static/js/main.786133b7.js.map",
+    "453.326161c2.chunk.js.map": "/diploma_klimkovich/static/js/453.326161c2.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3702df9d.css",
+    "static/js/main.786133b7.js"
+  ]
+}

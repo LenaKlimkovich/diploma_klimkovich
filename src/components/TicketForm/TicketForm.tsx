@@ -2,67 +2,176 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useRef, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import {
+  updateField,
+  selectCity,
+  setSearched,
+  changeDirections,
+  clearRoutes,
+  fetchRoutes,
+} from '../../store/slices/routesSlice';
 import styles from './TicketForm.module.css';
 import TicketDates from '../TicketDates/TicketDates';
+import { BASEURL } from '../../store/store';
 
 export interface TicketFormData {
   from: string;
   to: string;
-  dateTo: Date | null;
-  dateFrom: Date | null;
+  dateTo: string;
+  dateFrom?: string;
+}
+
+export interface City {
+  _id: string;
+  name: string;
 }
 
 export default function TicketForm(): React.ReactElement {
+  const dispatch = useAppDispatch();
+  const formData = useAppSelector((state) => state.routes);
+
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const isTicketsPage = location.pathname === '/tickets';
 
   const TicketFormClass = isHomePage ? styles['home'] : styles['tickets_page'];
 
-  const [formData, setFormData] = useState<TicketFormData>({
-    from: '',
-    to: '',
-    dateTo: null,
-    dateFrom: null,
-  });
-
   const [isOpenFrom, setIsOpenFrom] = useState<boolean>(false);
   const [isOpenTo, setIsOpenTo] = useState<boolean>(false);
+  const [citiesFrom, setCitiesFrom] = useState<City[]>([]);
+  const [citiesTo, setCitiesTo] = useState<City[]>([]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    if (!formData.toName.trim()) {
+      setCitiesTo([]);
+      const fetchDefaultCities = async () => {
+        try {
+          const response = await fetch(`${BASEURL}/routes/cities?name=а`);
+          const data = await response.json();
+          setCitiesTo(data);
+        } catch (error) {
+          console.error('Ошибка при загрузке дефолтных городов:', error);
+        }
+      };
+
+      fetchDefaultCities();
+      return () => controller.abort();
+    }
+
+    const delayDebounceFn = setTimeout(async () => {
+      try {
+        const response = await fetch(
+          `${BASEURL}/routes/cities?name=${formData.toName}`
+        );
+        const data = await response.json();
+
+        setCitiesTo(data);
+      } catch (error) {
+        console.error('Ошибка при загрузке городов:', error);
+      }
+    }, 300);
+
+    return () => {
+      clearTimeout(delayDebounceFn);
+      controller.abort();
+    };
+  }, [formData.toName]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    if (!formData.fromName.trim()) {
+      setCitiesFrom([]);
+      const fetchDefaultCities = async () => {
+        try {
+          const response = await fetch(`${BASEURL}/routes/cities?name=а`);
+          const data = await response.json();
+          setCitiesFrom(data);
+        } catch (error) {
+          console.error('Ошибка при загрузке дефолтных городов:', error);
+        }
+      };
+
+      fetchDefaultCities();
+      return () => controller.abort();
+    }
+
+    const delayDebounceFn = setTimeout(async () => {
+      try {
+        const response = await fetch(
+          `${BASEURL}/routes/cities?name=${formData.fromName}`
+        );
+        const data = await response.json();
+
+        setCitiesFrom(data);
+      } catch (error) {
+        console.error('Ошибка при загрузке городов:', error);
+      }
+    }, 300);
+
+    return () => {
+      clearTimeout(delayDebounceFn);
+      controller.abort();
+    };
+  }, [formData.fromName]);
 
   const navigate = useNavigate();
   const fromRef = useRef<HTMLDivElement>(null);
   const toRef = useRef<HTMLDivElement>(null);
 
-  const handleSwapDirections = (): void => {
-    setFormData((prev) => ({
-      ...prev,
-      from: prev.to,
-      to: prev.from,
-    }));
+  const handleChangeDirections = (): void => {
+    dispatch(changeDirections());
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const fieldName = name === 'from' ? 'fromName' : 'toName';
+    const idField = name === 'from' ? 'fromId' : 'toId';
+
+    dispatch(updateField({ name: fieldName, value: value }));
+
+    if (value.trim() === '') {
+      dispatch(updateField({ name: idField, value: '' }));
+      dispatch(clearRoutes());
+    }
+  };
+
+  const handleSelectCity = (
+    name: 'fromName' | 'toName',
+    city: string
+  ): void => {
+    dispatch(updateField({ name, value: city }));
+
+    if (name === 'fromName') setIsOpenFrom(false);
+    if (name === 'toName') setIsOpenTo(false);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
     const params: Record<string, string> = {
-      from: formData.from,
-      to: formData.to,
-      dateTo: formData.dateTo
-        ? formData.dateTo.toISOString().split('T')[0]
-        : '',
+      from: formData.fromName,
+      to: formData.toName,
+      dateTo: formData.dateStart || '',
+      dateFrom: formData.dateEnd || '',
+      sortBy: formData.sortBy,
     };
-
-    if (formData.dateFrom) {
-      params.dateFrom = formData.dateFrom.toISOString().split('T')[0];
-    }
 
     const searchParams = new URLSearchParams(params).toString();
     navigate(`/tickets?${searchParams}`);
+    dispatch(
+      fetchRoutes({
+        from_city_id: formData.fromId,
+        to_city_id: formData.toId,
+        date_start: formData.dateStart,
+        date_end: formData.dateEnd,
+      })
+    );
+    dispatch(setSearched(true));
   };
 
   useEffect(() => {
@@ -100,21 +209,36 @@ export default function TicketForm(): React.ReactElement {
                 name="from"
                 aria-label="Город отправления"
                 placeholder="Откуда"
-                value={formData.from}
-                onChange={handleChange}
+                value={formData.fromName}
+                onChange={(e) => handleChange(e)}
                 required
               />
-              {isOpenFrom && (
+
+              {isOpenFrom && citiesFrom.length > 0 && (
                 <ul className={styles['ticket-form__list']}>
-                  <li className={styles['ticket-form__list-item']}>Москва</li>
-                  <li className={styles['ticket-form__list-item']}>
-                    Санкт-петербург
-                  </li>
+                  {citiesFrom.map((city) => (
+                    <li
+                      key={city._id}
+                      className={styles['ticket-form__list-item']}
+                      onMouseDown={() => {
+                        handleSelectCity('fromName', `${city.name}`);
+                        dispatch(
+                          selectCity({
+                            type: 'from',
+                            name: city.name,
+                            id: city._id,
+                          })
+                        );
+                      }}
+                    >
+                      {city.name}
+                    </li>
+                  ))}
                 </ul>
               )}
               <img
                 className={styles['ticket-form__icon-location']}
-                src="/assets/images/location.png"
+                src={`${process.env.PUBLIC_URL}/assets/images/location.png`}
                 alt="Location"
               />
             </div>
@@ -122,12 +246,12 @@ export default function TicketForm(): React.ReactElement {
             <button
               type="button"
               className={styles['ticket-form__swap-btn']}
-              onClick={handleSwapDirections}
+              onClick={handleChangeDirections}
               aria-label="Поменять местами"
             >
               <img
                 className={styles['ticket-form__icon-swap']}
-                src="/assets/images/swap-location.png"
+                src={`${process.env.PUBLIC_URL}/assets/images/swap-location.png`}
                 alt="swap location"
               />
             </button>
@@ -141,21 +265,35 @@ export default function TicketForm(): React.ReactElement {
                 onFocus={() => setIsOpenTo(true)}
                 aria-label="Город назначения"
                 placeholder="Куда"
-                value={formData.to}
+                value={formData.toName}
                 onChange={handleChange}
                 required
               />
-              {isOpenTo && (
+              {isOpenTo && citiesTo.length > 0 && (
                 <ul className={styles['ticket-form__list']}>
-                  <li className={styles['ticket-form__list-item']}>Москва</li>
-                  <li className={styles['ticket-form__list-item']}>
-                    Санкт-петербург
-                  </li>
+                  {citiesTo.map((city) => (
+                    <li
+                      key={city._id}
+                      className={styles['ticket-form__list-item']}
+                      onMouseDown={() => {
+                        handleSelectCity('toName', `${city.name}`);
+                        dispatch(
+                          selectCity({
+                            type: 'to',
+                            name: city.name,
+                            id: city._id,
+                          })
+                        );
+                      }}
+                    >
+                      {city.name}
+                    </li>
+                  ))}
                 </ul>
               )}
               <img
                 className={styles['ticket-form__icon-location']}
-                src="/assets/images/location.png"
+                src={`${process.env.PUBLIC_URL}/assets/images/location.png`}
                 alt="Location"
               />
             </div>
@@ -167,25 +305,49 @@ export default function TicketForm(): React.ReactElement {
           )}
 
           <TicketDates
-            dateTo={formData.dateTo}
-            dateFrom={formData.dateFrom}
-            onChangeDateTo={(date) =>
-              setFormData((prev) => ({ ...prev, dateTo: date }))
-            }
-            onChangeDateFrom={(date) =>
-              setFormData((prev) => ({ ...prev, dateFrom: date }))
-            }
+            dateTo={formData.dateEnd ?? ''}
+            dateFrom={formData.dateStart ?? ''}
+            onChangeDateTo={(date: Date | null) => {
+              const timestampStr = date
+                ? Math.floor(date.getTime() / 1000).toString()
+                : '';
+              dispatch(updateField({ name: 'dateEnd', value: timestampStr }));
+              if (date === null) {
+                dispatch(updateField({ name: 'dateEnd', value: '' }));
+                dispatch(clearRoutes());
+              }
+            }}
+
+            onChangeDateFrom={(date: Date | null) => {
+              const timestampStr = date
+                ? Math.floor(date.getTime() / 1000).toString()
+                : '';
+              dispatch(updateField({ name: 'dateStart', value: timestampStr }));
+              if (date === null) {
+                dispatch(updateField({ name: 'dateStart', value: '' }));
+                dispatch(clearRoutes());
+              }
+            }}
             variant={isHomePage ? 'home' : 'tickets_page'}
           />
         </div>
       </div>
-
-      <button
-        className={`${styles['ticket-form__submit']} ${TicketFormClass}`}
-        type="submit"
-      >
-        НАЙТИ БИЛЕТЫ
-      </button>
+      {formData.loading ? (
+        <button
+          className={`${styles['ticket-form__submit']} ${styles['loading']} ${TicketFormClass}`}
+          type="submit"
+          disabled
+        >
+          НАЙТИ БИЛЕТЫ
+        </button>
+      ) : (
+        <button
+          className={`${styles['ticket-form__submit']} ${TicketFormClass}`}
+          type="submit"
+        >
+          НАЙТИ БИЛЕТЫ
+        </button>
+      )}
     </form>
   );
 }

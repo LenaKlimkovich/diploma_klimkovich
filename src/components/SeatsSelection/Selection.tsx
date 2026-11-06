@@ -1,44 +1,222 @@
 import styles from './Selection.module.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAppSelector } from '../../store/hooks';
+import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { WagonData } from '../../store/slices/seatsSlice';
+import { CoachCard } from '../CoachCard/CoachCard';
+import CoachMap from '../CoachMap/CoachMap';
+import { formattedTime, formattedDuration } from '../../utils/timeFormatters';
 
-interface SelectionProps {
-  isReturn?: boolean;
+export type AmenityType = 'none' | 'air-conditioning' | 'wifi' | 'linens';
+
+export type PassengerType = 'none' | 'adult' | 'child' | 'noseat';
+
+export interface SelectedSeat {
+  index: number;
+  seatType: PassengerType;
 }
 
-type AmenityType = 'none' | 'air-conditioning' | 'wifi' | 'bedding' | 'drinks';
+export interface SelectionProps {
+  destination?: 'departure' | 'arrival';
+  onSeatsChange: (seats: Record<string, SelectedSeat[]>) => void;
+  onAmenitiesChange: (
+    amenities: Record<string, Exclude<AmenityType, 'none'>[]>
+  ) => void;
+  onChildrenNoSeatChange?: (count: number) => void;
+}
 
 export default function Selection({
-  isReturn = false,
+  destination = 'departure',
+  onSeatsChange,
+  onAmenitiesChange,
+  onChildrenNoSeatChange,
 }: SelectionProps): React.ReactElement {
   const [activeTab, setActiveTab] = useState<
-    'none' | 'coupe' | 'sitting' | 'reserved-seat' | 'luxury'
+    'none' | 'first' | 'second' | 'third' | 'fourth'
   >('none');
 
-  const [activeAmenity, setActiveAmenity] = useState<
-    ('none' | 'air-conditioning' | 'wifi' | 'bedding' | 'drinks')[]
-  >(['none']);
+  const [activePassengerType, setActivePassengerType] =
+    useState<PassengerType>('adult');
 
-  const [activeWagon, setActiveWagon] = useState<string>('07');
+  // Структура данных будет вида: { "id_вагона_1": ["wifi", "drinks"], "id_вагона_2": ["bedding"] }
+  const [activeAmenities, setActiveAmenities] = useState<
+    Record<string, Exclude<AmenityType, 'none'>[]>
+  >({});
 
-  const handlerAddAmenity = (amenity: Exclude<AmenityType, 'none'>) => {
-    setActiveAmenity((prev) =>
-      activeAmenity.includes(amenity)
-        ? prev.filter((item) => item !== amenity)
-        : [...prev, amenity]
+  const [activeWagons, setActiveWagons] = useState<WagonData[]>([]);
+  // Структура данных: { "id_вагона_1":, "id_вагона_2": [1, 2] }
+  const [selectedSeats, setSelectedSeats] = useState<
+    Record<string, SelectedSeat[]>
+  >({});
+
+  useEffect(() => {
+    onAmenitiesChange(activeAmenities);
+  }, [activeAmenities, onAmenitiesChange]);
+
+  const [adults, setAdults] = useState<number | ''>(0);
+  const [children, setChildren] = useState<number | ''>(0);
+  const [childrenNoSeat, setChildrenNoSeat] = useState<number | ''>(0);
+  const MAX_SEATS_ADULTS = 5;
+  const MAX_SEATS_CHILDREN = 4;
+  const remainingAdultSeats = MAX_SEATS_ADULTS - Number(adults);
+  const remainingChildrenSeats = MAX_SEATS_CHILDREN - Number(children);
+
+  const seats = useAppSelector((state) => state.seats);
+  const route = useAppSelector((state) => state.routes.selectedRoute);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (onChildrenNoSeatChange) {
+      onChildrenNoSeatChange(childrenNoSeat === '' ? 0 : childrenNoSeat);
+    }
+  }, [childrenNoSeat, onChildrenNoSeatChange]);
+
+  useEffect(() => {
+    onSeatsChange(selectedSeats);
+  }, [selectedSeats, onSeatsChange]);
+
+  useEffect(() => {
+    if (!route) {
+      navigate('/tickets');
+    }
+  }, [route, navigate]);
+
+  useEffect(() => {
+    setActivePassengerType('adult');
+    setActiveWagons([]);
+    setSelectedSeats({});
+  }, [activeTab]);
+
+  if (!route) {
+    return (
+      <div className={styles['seats-selection__loading']}>
+        Перенаправление к списку поездов...
+      </div>
     );
+  }
+
+  const handleInputChange = (e: React.ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+    const type = target.name;
+    if (target.value === '') {
+      if (type === 'adults') setAdults('');
+      if (type === 'children') setChildren('');
+      if (type === 'childrenNoSeat') setChildrenNoSeat('');
+      return;
+    }
+    let value = parseInt(target.value, 10);
+    if (type === 'children' && value >= 0 && value <= remainingChildrenSeats) {
+      setChildren(value);
+    }
+    if (type === 'adults' && value >= 0 && value <= remainingAdultSeats) {
+      setAdults(value);
+    }
+    if (type === 'childrenNoSeat' && value >= 0 && value <= Number(adults)) {
+      setChildrenNoSeat(value);
+    }
+  };
+
+  const currentTrainInfo = route[destination];
+  const currentWagons = seats[destination];
+  const existingTypes = currentWagons.filter(
+    (wagon) => wagon.coach.class_type === activeTab
+  );
+
+  const handlerAddAmenity = (
+    wagonId: string,
+    amenity: Exclude<AmenityType, 'none'>
+  ) => {
+    setActiveAmenities((prev) => {
+      const currentWagonAmenities = prev[wagonId] || [];
+
+      const updatedAmenities = currentWagonAmenities.includes(amenity)
+        ? currentWagonAmenities.filter((item) => item !== amenity)
+        : [...currentWagonAmenities, amenity];
+
+      return {
+        ...prev,
+        [wagonId]: updatedAmenities,
+      };
+    });
+  };
+
+  const handlePassengerTypeClick = (type: PassengerType) => {
+    setActivePassengerType(activePassengerType === type ? 'none' : type);
+  };
+
+  const handleSeatClick = (wagonId: string, seatNumber: number) => {
+    const isSeatSelected = selectedSeats[wagonId]?.some(
+      (seat) => seat.index === seatNumber
+    );
+
+    if (!isSeatSelected) {
+      if (activePassengerType === 'adult') {
+        const currentAdultCount = Object.values(selectedSeats)
+          .flat()
+          .filter((s) => s.seatType === 'adult').length;
+
+        if (currentAdultCount >= Number(adults)) {
+          return;
+        }
+      }
+
+      if (activePassengerType === 'child') {
+        const currentChildCount = Object.values(selectedSeats)
+          .flat()
+          .filter((s) => s.seatType === 'child').length;
+
+        if (currentChildCount >= Number(children)) {
+          return;
+        }
+      }
+    }
+
+    setSelectedSeats((prev) => {
+      const currentWagonSeats = prev[wagonId] || [];
+
+      const isSelected = currentWagonSeats?.some(
+        (seat) => seat.index === seatNumber
+      );
+
+      let updatedSeats: SelectedSeat[];
+
+      if (isSelected) {
+        updatedSeats = currentWagonSeats.filter(
+          (seat) => seat.index !== seatNumber
+        );
+      } else {
+        updatedSeats = [
+          ...currentWagonSeats,
+          { index: seatNumber, seatType: activePassengerType },
+        ];
+      }
+      return {
+        ...prev,
+        [wagonId]: updatedSeats,
+      };
+    });
+  };
+
+  const handleBackClick = () => {
+    navigate(-1);
   };
 
   return (
     <section className={styles['seats-selection']}>
       <div
-        className={`${styles['seats-selection__back']} ${isReturn ? styles['seats-selection__back_return'] : ''}`}
+        className={`${styles['seats-selection__back']} ${destination === 'arrival' ? styles['seats-selection__back_return'] : ''}`}
       >
         <img
-          className={`${styles['seats-selection__back-arrow']} ${isReturn ? styles['seats-selection__back-arrow_return'] : ''}`}
-          src="/assets/images/arrow-to-black.png"
+          className={`${styles['seats-selection__back-arrow']} ${destination === 'arrival' ? styles['seats-selection__back-arrow_return'] : ''}`}
+          src={`${process.env.PUBLIC_URL}/assets/images/arrow-to-black.png`}
           alt="Arrow to"
         />
-        <button type="button" className={styles['seats-selection__back-btn']}>
+        <button
+          type="button"
+          className={styles['seats-selection__back-btn']}
+          onClick={handleBackClick}
+        >
           Выбрать другой поезд
         </button>
       </div>
@@ -48,255 +226,243 @@ export default function Selection({
         <div className={styles['train-info__number-block']}>
           <div className={styles['train-info__icon']}></div>
           <div>
-            <div className={styles['train-info__number']}>116С</div>
+            <div className={styles['train-info__number']}>
+              {currentTrainInfo.train.name}
+            </div>
             <div className={styles['train-info__route']}>
-              <span>Адлер →</span>
-              <span>Москва →</span>
-              <span>Санкт-Петербург</span>
+              <span>{currentTrainInfo.from.city.name} →</span>
+              <span>{currentTrainInfo.to.city.name}</span>
             </div>
           </div>
         </div>
         <div className={styles['train-info__time-block']}>
-          <div className={styles['train-info__time']}>00:10</div>
+          <div className={styles['train-info__time']}>
+            {formattedTime('from', currentTrainInfo)}
+          </div>
           <div className={styles['train-info__station']}>
-            <span>Москва </span>
-            <span>Курский вокзал</span>
+            <span>{currentTrainInfo.from.city.name}</span>
+            <span>{currentTrainInfo.from.railway_station_name}</span>
           </div>
         </div>
         <img
-          className={styles['train-info__arrow-to']}
-          src="/assets/images/arrow-to.png"
+          className={`${styles['train-info__arrow-to']} ${destination === 'arrival' ? styles['train-info__arrow-to_return'] : ''}`}
+          src={`${process.env.PUBLIC_URL}/assets/images/arrow-to.png`}
           alt="Arrow to"
-        ></img>
+        />
         <div className={styles['train-info__time-block']}>
-          <div className={styles['train-info__time']}>09:52</div>
+          <div className={styles['train-info__time']}>
+            {formattedTime('to', currentTrainInfo)}
+          </div>
           <div className={styles['train-info__station']}>
-            <span>Санкт-Петербург</span>
-            <span>Ладожский вокзал</span>
+            <span>{currentTrainInfo.to.city.name}</span>
+            <span>{currentTrainInfo.to.railway_station_name}</span>
           </div>
         </div>
         <div className={styles['train-info__duration']}>
           <img
             className={styles['train-info__clock']}
-            src="/assets/images/clock.png"
+            src={`${process.env.PUBLIC_URL}/assets/images/clock.png`}
             alt="Clock"
-          ></img>
-
+          />
           <div className={styles['train-info__hours-minutes']}>
-            <span>9 часов</span>
-            <span>42 минуты</span>
+            <span>{formattedDuration(currentTrainInfo)}</span>
           </div>
         </div>
       </div>
-
-      {/* Блок: Количество билетов */}
       <section className={styles['seats-selection__tickets-number']}>
         <h1 className={styles['seats-selection__title-number']}>
           Количество билетов
         </h1>
-        <div className={styles['seats-selection__tickets-grid']}>
-          <div className={styles['ticket-counter']}>
+        <form className={styles['seats-selection__tickets-grid']}>
+          <div
+            className={`${styles['ticket-counter']} ${activePassengerType === 'adult' ? styles['ticket-counter_active'] : ''}`}
+            onClick={() => handlePassengerTypeClick('adult')}
+          >
             <div className={styles['ticket-counter__row']}>
               <span className={styles['ticket-counter__label']}>
-                Взрослых - 2
+                Взрослых -
               </span>
+              <input
+                className={styles['ticket-counter__input']}
+                id="seats-count"
+                name="adults"
+                type="number"
+                min="0"
+                max={MAX_SEATS_ADULTS}
+                value={adults}
+                onChange={handleInputChange}
+              />
             </div>
             <p className={styles['ticket-counter__hint-adults']}>
-              Можно добавить еще 3 пассажиров
-            </p>
-          </div>
-
-          <div className={styles['ticket-counter']}>
-            <div className={styles['ticket-counter__row']}>
-              <span className={styles['ticket-counter__label']}>
-                Детских - 1
-              </span>
-            </div>
-            <p className={styles['ticket-counter__hint-children']}>
-              Можно добавить еще 3 детей до 10 лет.Свое место в вагоне, как у
-              взрослых, но дешевле в среднем на 50-65%
+              <>Можно добавить еще {remainingAdultSeats} пассажиров</>
             </p>
           </div>
 
           <div
-            className={`${styles['ticket-counter']} $styles['ticket-counter__children_noseat']`}
+            className={`${styles['ticket-counter']} ${activePassengerType === 'child' ? styles['ticket-counter_active'] : ''}`}
+            onClick={() => handlePassengerTypeClick('child')}
           >
             <div className={styles['ticket-counter__row']}>
+              <span className={styles['ticket-counter__label']}>Детских -</span>
+              <input
+                className={styles['ticket-counter__input']}
+                id="seats-count"
+                name="children"
+                type="number"
+                min="0"
+                max={MAX_SEATS_CHILDREN}
+                value={children}
+                onChange={handleInputChange}
+              />
+            </div>
+            {Number(adults) > 0 && (
+              <p className={styles['ticket-counter__hint-children']}>
+                <>
+                  Можно добавить еще {remainingChildrenSeats} детей до 10 лет.
+                  Свое место в вагоне, как у взрослых, но дешевле в среднем на
+                  50-65%
+                </>
+              </p>
+            )}
+          </div>
+          <div className={styles['ticket-counter']}>
+            <div className={styles['ticket-counter__row']}>
               <span className={styles['ticket-counter__label']}>
-                Детских «без места» - 0
+                Детских «без места» -
               </span>
+              <input
+                className={styles['ticket-counter__input']}
+                id="seats-count"
+                name="childrenNoSeat"
+                type="number"
+                min="0"
+                max={adults}
+                value={childrenNoSeat}
+                onChange={handleInputChange}
+              />
             </div>
           </div>
-        </div>
+        </form>
       </section>
-
-      {/* Блок: Тип вагона */}
       <section className={styles['seats-selection__car-type']}>
         <h1 className={styles['seats-selection__title']}>Тип вагона</h1>
         <div className={styles['seats-selection__tabs']}>
           <button
-            className={`${styles['tab-btn']} ${activeTab === 'sitting' ? styles['tab-btn_active'] : ''}`}
-            onClick={() => setActiveTab('sitting')}
+            className={`${styles['tab-btn']} ${activeTab === 'fourth' ? styles['tab-btn_active'] : ''}`}
+            onClick={() => setActiveTab('fourth')}
           >
             <img
               className={styles['tab-btn__icon']}
-              src="/assets/images/sitting-passenger.svg"
-              alt="Sitting passsenger"
-            ></img>{' '}
+              src={`${process.env.PUBLIC_URL}/assets/images/sitting-passenger.svg`}
+              alt="Sitting passenger"
+            />{' '}
             Сидячий
           </button>
+
           <button
-            className={`${styles['tab-btn']} ${activeTab === 'reserved-seat' ? styles['tab-btn_active'] : ''}`}
-            onClick={() => setActiveTab('reserved-seat')}
+            className={`${styles['tab-btn']} ${activeTab === 'third' ? styles['tab-btn_active'] : ''}`}
+            onClick={() => setActiveTab('third')}
           >
             <img
               className={styles['tab-btn__icon']}
-              src="/assets/images/reserved-seat.svg"
+              src={`${process.env.PUBLIC_URL}/assets/images/reserved-seat.svg`}
               alt="Reserved seat"
-            ></img>{' '}
+            />{' '}
             Плацкарт
           </button>
           <button
-            className={`${styles['tab-btn']} ${activeTab === 'coupe' ? styles['tab-btn_active'] : ''}`}
-            onClick={() => setActiveTab('coupe')}
+            className={`${styles['tab-btn']} ${activeTab === 'second' ? styles['tab-btn_active'] : ''}`}
+            onClick={() => setActiveTab('second')}
           >
             <img
               className={styles['tab-btn__icon']}
-              src="/assets/images/compartment.svg"
+              src={`${process.env.PUBLIC_URL}/assets/images/compartment.svg`}
               alt="Compartment"
-            ></img>{' '}
+            />{' '}
             Купе
           </button>
+
           <button
-            className={`${styles['tab-btn']} ${activeTab === 'luxury' ? styles['tab-btn_active'] : ''}`}
-            onClick={() => setActiveTab('luxury')}
+            className={`${styles['tab-btn']} ${activeTab === 'first' ? styles['tab-btn_active'] : ''}`}
+            onClick={() => setActiveTab('first')}
           >
             <img
               className={styles['tab-btn__icon']}
-              src="/assets/images/star.svg"
+              src={`${process.env.PUBLIC_URL}/assets/images/star.svg`}
               alt="Luxury"
-            ></img>
+            />{' '}
             Люкс
           </button>
         </div>
       </section>
-
-      {activeTab !== 'none' && (
+      {activeTab !== 'none' && existingTypes.length > 0 && (
         <div className={styles['seats-selection__wagon-selector']}>
           <div className={styles['wagon-selector__header']}>
             <div className={styles['wagon-selector__list']}>
-              Вагоны
-              <button
-                className={`${styles['wagon-btn']} ${activeWagon === '07' ? styles['wagon-btn_active'] : ''}`}
-                onClick={() => setActiveWagon('07')}
-              >
-                07
-              </button>
-              <button
-                className={`${styles['wagon-btn']} ${activeWagon === '09' ? styles['wagon-btn_active'] : ''}`}
-                onClick={() => setActiveWagon('09')}
-              >
-                09
-              </button>
+              Вагоны{' '}
+              {existingTypes.map((wagon) => (
+                <button
+                  key={wagon.coach._id}
+                  className={`${styles['wagon-btn']} ${
+                    activeWagons.some((w) => w.coach._id === wagon.coach._id)
+                      ? styles['wagon-btn_active']
+                      : ''
+                  }`}
+                  onClick={() => {
+                    setActiveWagons((prev) =>
+                      prev.some((w) => w.coach._id === wagon.coach._id)
+                        ? prev.filter((w) => w.coach._id !== wagon.coach._id)
+                        : [...prev, wagon]
+                    );
+                  }}
+                >
+                  {wagon.coach.name}
+                </button>
+              ))}
             </div>
             <span className={styles['wagon-selector__direction']}>
               Нумерация вагонов начинается с головы поезда
             </span>
           </div>
-
-          {/* Детализация вагона */}
-          <div className={styles['wagon-detail']}>
-            <div className={styles['wagon-detail__number-block']}>
-              <div className={styles['wagon-detail__huge-number']}>07</div>
-              <div className={styles['wagon-detail__label']}>вагон</div>
-            </div>
-
-            <div className={styles['wagon-detail__info-grid']}>
-              <div className={styles['wagon-detail__seats-info']}>
-                <div className={styles['wagon-detail__info-column']}>
-                  <span className={styles['wagon-detail__seats-number']}>
-                    Места <span>11</span>
-                  </span>
-                  <span className={styles['wagon-detail__seats']}>
-                    Верхние <strong>3</strong>
-                  </span>
-                  <span className={styles['wagon-detail__seats']}>
-                    Нижние <strong>8</strong>
-                  </span>
-                </div>
-                <div className={styles['wagon-detail__info-column']}>
-                  <span className={styles['wagon-detail__price']}>
-                    Стоимость
-                  </span>
-                  <span className={styles['wagon-detail__sum']}>
-                    <strong>2 920</strong> ₽
-                  </span>
-                  <span className={styles['wagon-detail__sum']}>
-                    <strong>3 530</strong> ₽
-                  </span>
-                </div>
-              </div>
-
-              <div className={styles['wagon-detail__amenities']}>
-                <div className={styles['amenities-title']}>
-                  <span className={styles['amenities-services']}>
-                    Обслуживание
-                  </span>
-                  <span className={styles['amenities-fpk']}>ФПК</span>
-                </div>
-                <div className={styles['amenities']}>
-                  <div
-                    className={`
-  ${styles['amenity']} 
-  ${styles['air-conditioning']} 
-  ${activeAmenity.includes('air-conditioning') ? styles['amenity_active'] : ''}
-`}
-                    onClick={() => handlerAddAmenity('air-conditioning')}
-                    data-title="Кондиционер"
-                  ></div>
-                  <div
-                    className={`${styles['amenity']} ${styles['wifi']} ${activeAmenity.includes('wifi') ? styles['amenity_active'] : ''}`}
-                    onClick={() => handlerAddAmenity('wifi')}
-                    data-title="Wi-fi"
-                  ></div>
-                  <div
-                    className={`${styles['amenity']} ${styles['bedding']} ${activeAmenity.includes('bedding') ? styles['amenity_active'] : ''}`}
-                    onClick={() => handlerAddAmenity('bedding')}
-                    data-title="Постельное белье"
-                  ></div>
-                  <div
-                    className={`${styles['amenity']} ${styles['drinks']} ${activeAmenity.includes('drinks') ? styles['amenity_active'] : ''}`}
-                    onClick={() => handlerAddAmenity('drinks')}
-                    data-title="Напитки"
-                  ></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <span className={styles['wagon-add-info']}>
-            13 человек выбирают
-            <br /> места в этом поезде
-          </span>
-          <div className={styles['wagon-map']}>
-            {activeTab === 'coupe' && (
-              <img
-                src="/assets/images/compartment-plan.svg"
-                alt="Compartment"
-              />
-            )}
-            {activeTab === 'sitting' && (
-              <img src="/assets/images/sitting-plan.png" alt="Sitting" />
-            )}
-            {activeTab === 'reserved-seat' && (
-              <img src="/assets/images/reserved-plan.svg" alt="Reserved" />
-            )}
-            {activeTab === 'luxury' && (
-              <img src="/assets/images/luxury-plan.png" alt="Luxury" />
-            )}
-          </div>
-          <div className={styles['ticket-price']}>
-            8 080<span>₽</span>
-          </div>
+          {existingTypes
+            .filter((wagon) =>
+              activeWagons.some(
+                (activeWagon) => activeWagon.coach._id === wagon.coach._id
+              )
+            )
+            .map((wagon, index) => {
+              const currentWagonSeatsNumbers = (
+                selectedSeats[wagon.coach._id] || []
+              ).map((seat) => seat.index);
+              return (
+                <>
+                  <CoachCard
+                    key={wagon.coach._id}
+                    wagon={wagon}
+                    index={index}
+                    activeTab={activeTab}
+                    wagonAmenities={activeAmenities[wagon.coach._id] || []}
+                    onAddAmenity={(amenity) =>
+                      handlerAddAmenity(wagon.coach._id, amenity)
+                    }
+                    wagonSeats={selectedSeats[wagon.coach._id] || []}
+                    onSeatClick={(seatNumber) => {
+                      handleSeatClick(wagon.coach._id, seatNumber);
+                    }}
+                  />
+                  <CoachMap
+                    activeTab={activeTab}
+                    currentCoachData={wagon}
+                    currentAmenities={activeAmenities[wagon.coach._id] || []}
+                    destination={destination}
+                    wagonSeats={selectedSeats[wagon.coach._id] || []}
+                    onSeatClick={(seatNumber) =>
+                      handleSeatClick(wagon.coach._id, seatNumber)
+                    }
+                  />
+                </>
+              );
+            })}
         </div>
       )}
     </section>

@@ -1,16 +1,44 @@
 import { useState } from 'react';
 import styles from './TripDetails.module.css';
+import { useAppSelector } from '../../store/hooks';
+import { formattedTime, formattedDuration } from '../../utils/timeFormatters';
 
 export default function TripDetails() {
+  const route = useAppSelector((state) => state.routes.selectedRoute);
+  const order = useAppSelector((state) => state.order);
+
   const [isToOpen, setIsToOpen] = useState(true);
   const [isBackOpen, setIsBackOpen] = useState(true);
   const [isPassengersOpen, setIsPassengersOpen] = useState(true);
 
+  const stringToDate = (
+    destination: 'departure' | 'arrival',
+    direction: 'from' | 'to'
+  ) => {
+    return new Date(
+      Number(route[destination][direction].datetime) * 1000
+    ).toLocaleDateString('ru-RU');
+  };
+
+  const arrivalDate = (type: 'departure' | 'arrival') => {
+    const date = route[type];
+    const startMs = date.to.datetime * 1000;
+
+    return new Date(startMs).toLocaleDateString('ru-RU');
+  };
+
+  const adultData = order.prices.find((p) => p.type === 'adult');
+  const childData = order.prices.find((p) => p.type === 'child');
+  const adultCount = order.departure.seats.filter(
+    (seat) => !seat.is_child
+  ).length;
+  const childCount = order.departure.seats.filter(
+    (seat) => seat.is_child
+  ).length;
+
   return (
     <div className={styles['trip-details']}>
       <h3 className={styles['trip-details__title']}>ДЕТАЛИ ПОЕЗДКИ</h3>
-
-      {/* --- СЕКЦИЯ ТУДА --- */}
       <div
         className={`${styles['trip-details__section']} ${styles['trip-details__section-to']}`}
       >
@@ -21,12 +49,12 @@ export default function TripDetails() {
           <div className={styles['trip-details__header-left']}>
             <img
               className={styles['trip-details__icon-arrow']}
-              src="/assets/images/arrow-to-black.png"
+                src={`${process.env.PUBLIC_URL}/assets/images/arrow-to-black.png`}
               alt="Arrow"
             ></img>
             <h1 className={styles['trip-details__section-title']}>Туда</h1>
             <span className={styles['trip-details__section-date']}>
-              30.08.2018
+              {stringToDate('departure', 'from')}
             </span>
           </div>
           <div
@@ -37,64 +65,68 @@ export default function TripDetails() {
             }
           ></div>
         </div>
-
         {isToOpen && (
           <div className={styles['trip-details__section-content']}>
             <div className={styles['trip-details__info-row']}>
               <span>№ Поезда</span>
               <strong className={styles['trip-details__train-number']}>
-                116С
+                {route.departure.train.name}
               </strong>
             </div>
             <div className={styles['trip-details__info-row']}>
               <span>Название</span>
               <span className={styles['trip-details__text-right']}>
-                Адлер
+                {route.departure.from.city.name}
                 <br />
-                Санкт-Петербург
+                {route.departure.to.city.name}
               </span>
             </div>
-
-            {/* Сетка маршрута */}
             <div className={styles['trip-details__route-grid']}>
-              {/* ЛЕВАЯ КОЛОНКА: Отправление */}
               <div className={styles['trip-details__route-time-block']}>
-                <div className={styles['trip-details__time']}>00:10</div>
-                <div className={styles['trip-details__date']}>30.08.2018</div>
-                <div className={styles['trip-details__city']}>Москва</div>
+                <div className={styles['trip-details__time']}>
+                  {' '}
+                  {formattedTime('from', route.departure)}
+                </div>
+                <div className={styles['trip-details__date']}>
+                  {stringToDate('departure', 'from')}
+                </div>
+                <div className={styles['trip-details__city']}>
+                  {route.departure.from.city.name}
+                </div>
                 <div className={styles['trip-details__station']}>
-                  Курский вокзал
+                  {route.departure.from.railway_station_name}
                 </div>
               </div>
-
-              {/* ЦЕНТРАЛЬНАЯ КОЛОНКА: Время в пути + Стрелочка */}
               <div className={styles['trip-details__center-column']}>
-                <div className={styles['trip-details__duration']}>9:42</div>
+                <div className={styles['trip-details__duration']}>
+                  {formattedDuration(route.departure)}
+                </div>
                 <img
                   className={styles['trip-details__arrow-line']}
-                  src="/assets/images/arrow-to-brightorange.png"
+                    src={`${process.env.PUBLIC_URL}/assets/images/arrow-back-brightorange.png`}
                   alt="Arrow to"
                 />
               </div>
-
-              {/* ПРАВАЯ КОЛОНКА: Прибытие */}
               <div
                 className={`${styles['trip-details__route-time-block']} ${styles['trip-details__text-right']}`}
               >
-                <div className={styles['trip-details__time']}>09:52</div>
-                <div className={styles['trip-details__date']}>31.08.2018</div>
+                <div className={styles['trip-details__time']}>
+                  {formattedTime('to', route.departure)}
+                </div>
+                <div className={styles['trip-details__date']}>
+                  {arrivalDate('departure')}
+                </div>
                 <div className={styles['trip-details__city']}>
-                  Санкт-Петербург
+                  {route.departure.to.city.name}
                 </div>
                 <div className={styles['trip-details__station']}>
-                  Ладожский вокзал
+                  {route.departure.to.railway_station_name}
                 </div>
               </div>
             </div>
           </div>
         )}
       </div>
-      {/* --- СЕКЦИЯ ОБРАТНО --- */}
       <div
         className={`${styles['trip-details__section']} ${styles['trip-details__section-back']}`}
       >
@@ -105,13 +137,15 @@ export default function TripDetails() {
           <div className={styles['trip-details__header-left']}>
             <img
               className={styles['trip-details__icon-arrow']}
-              src="/assets/images/arrow-back-black.png"
+               src={`${process.env.PUBLIC_URL}/assets/images/arrow-back-black.png`}
               alt="Arrow back"
             ></img>
             <h1 className={styles['trip-details__section-title']}>Обратно</h1>
-            <span className={styles['trip-details__section-date']}>
-              09.09.2018
-            </span>
+            {route.arrival && (
+              <span className={styles['trip-details__section-date']}>
+                {stringToDate('arrival', 'from')}
+              </span>
+            )}
           </div>
           <div
             className={
@@ -121,63 +155,67 @@ export default function TripDetails() {
             }
           ></div>
         </div>
-
-        {isBackOpen && (
+        {isBackOpen && route.arrival && (
           <div className={styles['trip-details__section-content']}>
             <div className={styles['trip-details__info-row']}>
               <span>№ Поезда</span>
               <strong className={styles['trip-details__train-number']}>
-                116С
+                {route.arrival.train.name}
               </strong>
             </div>
             <div className={styles['trip-details__info-row']}>
               <span>Название</span>
               <span className={styles['trip-details__text-right']}>
-                Адлер
+                {route.arrival.from.city.name}
                 <br />
-                Санкт-Петербург
+                {route.arrival.to.city.name}
               </span>
             </div>
             <div className={styles['trip-details__route-grid']}>
-              {/* ЛЕВАЯ КОЛОНКА: Отправление */}
               <div className={styles['trip-details__route-time-block']}>
-                <div className={styles['trip-details__time']}>00:10</div>
-                <div className={styles['trip-details__date']}>30.08.2018</div>
-                <div className={styles['trip-details__city']}>Москва</div>
+                <div className={styles['trip-details__time']}>
+                  {formattedTime('from', route.arrival)}
+                </div>
+                <div className={styles['trip-details__date']}>
+                  {stringToDate('arrival', 'to')}
+                </div>
+                <div className={styles['trip-details__city']}>
+                  {route.arrival.to.city.name}
+                </div>
                 <div className={styles['trip-details__station']}>
-                  Курский вокзал
+                  {route.arrival.to.railway_station_name}
                 </div>
               </div>
-
-              {/* ЦЕНТРАЛЬНАЯ КОЛОНКА: Время в пути + Стрелочка */}
               <div className={styles['trip-details__center-column']}>
-                <div className={styles['trip-details__duration']}>9:42</div>
+                <div className={styles['trip-details__duration']}>
+                  {formattedDuration(route.arrival)}
+                </div>
                 <img
                   className={styles['trip-details__arrow-line']}
-                  src="/assets/images/arrow-back-brightorange.png"
+                 src={`${process.env.PUBLIC_URL}/assets/images/arrow-to-brightorange.png`}
                   alt="Arrow to"
                 />
               </div>
-
-              {/* ПРАВАЯ КОЛОНКА: Прибытие */}
               <div
                 className={`${styles['trip-details__route-time-block']} ${styles['trip-details__text-right']}`}
               >
-                <div className={styles['trip-details__time']}>09:52</div>
-                <div className={styles['trip-details__date']}>31.08.2018</div>
+                <div className={styles['trip-details__time']}>
+                  {formattedTime('to', route.arrival)}
+                </div>
+                <div className={styles['trip-details__date']}>
+                  {stringToDate('arrival', 'from')}
+                </div>
                 <div className={styles['trip-details__city']}>
-                  Санкт-Петербург
+                  {route.arrival.from.city.name}
                 </div>
                 <div className={styles['trip-details__station']}>
-                  Ладожский вокзал
+                  {route.arrival.from.railway_station_name}
                 </div>
               </div>
             </div>
           </div>
         )}
       </div>
-
-      {/* --- СЕКЦИЯ ПАССАЖИРЫ --- */}
       <div
         className={`${styles['trip-details__section']} ${styles['trip-details__section-passengers']}`}
       >
@@ -188,7 +226,7 @@ export default function TripDetails() {
           <div className={styles['trip-details__header-left']}>
             <img
               className={styles['trip-details__icon-passenger']}
-              src="../assets/images/passenger.png"
+                src={`${process.env.PUBLIC_URL}/assets/images/passenger.png`}
               alt="Passenger"
             ></img>
             <h1 className={styles['trip-details__section-title']}>Пассажиры</h1>
@@ -201,34 +239,47 @@ export default function TripDetails() {
             }
           ></div>
         </div>
-
         {isPassengersOpen && (
           <div className={styles['trip-details__section-content']}>
-            <div className={styles['trip-details__info-row']}>
-              <span className={styles['trip-details__muted-text']}>
-                2 Взрослых
-              </span>
-              <span className={styles['trip-details__price-row']}>
-                5 840 <span className={styles['trip-details__ruble']}>₽</span>
-              </span>
-            </div>
-            <div className={styles['trip-details__info-row']}>
-              <span className={styles['trip-details__muted-text']}>
-                1 Ребенок
-              </span>
-              <span className={styles['trip-details__price-row']}>
-                1 920 <span className={styles['trip-details__ruble']}>₽</span>
-              </span>
-            </div>
+            {adultData && (
+              <div className={styles['trip-details__info-row']}>
+                <span className={styles['trip-details__muted-text']}>
+                  <>{adultCount} Взрослых</>
+                </span>
+                <span className={styles['trip-details__price-row']}>
+                  <>
+                    {' '}
+                    {adultData?.price}{' '}
+                    <span className={styles['trip-details__ruble']}>₽</span>
+                  </>
+                </span>
+              </div>
+            )}
+            {childData && (
+              <div className={styles['trip-details__info-row']}>
+                <span className={styles['trip-details__muted-text']}>
+                  <>{childCount} Ребенок</>
+                </span>
+                <span className={styles['trip-details__price-row']}>
+                  {' '}
+                  <>
+                    {childData?.price}{' '}
+                    <span className={styles['trip-details__ruble']}>₽</span>
+                  </>
+                </span>
+              </div>
+            )}
           </div>
         )}
       </div>
-
-      {/* --- ИТОГ --- */}
       <div className={styles['trip-details__total-block']}>
         <h1 className={styles['trip-details__total-title']}>ИТОГ</h1>
         <span className={styles['trip-details__total-price']}>
-          7 760 <span className={styles['trip-details__ruble--large']}>₽</span>
+          <>
+            {' '}
+            {(adultData?.price || 0) + (childData?.price || 0)}{' '}
+            <span className={styles['trip-details__ruble--large']}>₽</span>
+          </>
         </span>
       </div>
     </div>

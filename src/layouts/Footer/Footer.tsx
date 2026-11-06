@@ -1,5 +1,7 @@
 import React from 'react';
 import styles from './Footer.module.css';
+import { BASEURL } from '../../store/store';
+import { useState } from 'react';
 
 export function Footer(): React.ReactElement {
   const handleScrollToTop = (
@@ -16,6 +18,32 @@ export function Footer(): React.ReactElement {
       });
     }
   };
+
+  const [email, setEmail] = useState('');
+
+  const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!email) return;
+
+    try {
+      const response = await fetch(
+        `${BASEURL}/subscribe?email=${encodeURIComponent(email)}`,
+        {
+          method: 'POST',
+        }
+      );
+
+      if (response.ok) {
+        alert('Вы успешно подписались!');
+        setEmail('');
+      } else {
+        alert('Что-то пошло не так...');
+      }
+    } catch (error) {
+      console.error('Ошибка при отправке:', error);
+    }
+  };
+
   return (
     <footer id="contacts" className={styles.footer}>
       <div className={styles.footer__top}>
@@ -66,10 +94,13 @@ export function Footer(): React.ReactElement {
 
           <form
             className={`${styles.footer__form} ${styles['subscribe-form']}`}
+            onSubmit={handleSubscribe}
           >
             <input
               className={styles['subscribe-form__input']}
               placeholder="e-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <button className={styles['subscribe-form__submit']} type="submit">
               ОТПРАВИТЬ

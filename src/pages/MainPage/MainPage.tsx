@@ -68,7 +68,7 @@ export const MainPage = (): ReactElement => {
           >
             <img
               className={styles['feedback-card_img']}
-              src="/assets/images/feedback-first.png"
+              src={`${process.env.PUBLIC_URL}/assets/images/feedback-first.png`}
               alt="Екатерина Вальнова"
             />
             <div className={styles['feedback-card_container']}>
@@ -77,7 +77,7 @@ export const MainPage = (): ReactElement => {
                 <p className={styles['feedback-card__text']}>
                   <img
                     className={`${styles['quotation-mark']} ${styles['quotation-mark--start']}`}
-                    src="/assets/images/quotation-start.png"
+                    src={`${process.env.PUBLIC_URL}/assets/images/quotation-start.png`}
                     alt="Кавычка открывается"
                   />
                   Доброжелательные подсказки на всех этапах помогут правильно
@@ -85,7 +85,7 @@ export const MainPage = (): ReactElement => {
                   даже если вы заказываете онлайн билет впервые.
                   <img
                     className={`${styles['quotation-mark']} ${styles['quotation-mark--end']}`}
-                    src="/assets/images/quotation-end.png"
+                    src={`${process.env.PUBLIC_URL}/assets/images/quotation-end.png`}
                     alt="Кавычка закрывается"
                   />
                 </p>
@@ -98,7 +98,7 @@ export const MainPage = (): ReactElement => {
           >
             <img
               className={styles['feedback-card_img']}
-              src="/assets/images/feedback-second.png"
+              src={`${process.env.PUBLIC_URL}/assets/images/feedback-second.png`}
               alt="Евгений Стрыкало"
             />
             <div className={styles['feedback-card_container']}>
@@ -107,7 +107,7 @@ export const MainPage = (): ReactElement => {
                 <p className={styles['feedback-card__text']}>
                   <img
                     className={`${styles['quotation-mark']} ${styles['quotation-mark--start']}`}
-                    src="/assets/images/quotation-start.png"
+                    src={`${process.env.PUBLIC_URL}/assets/images/quotation-start.png`}
                     alt="Кавычка открывается"
                   />
                   СМС-сопровождение до посадки Сразу после оплаты ж/д билетов и
@@ -115,7 +115,7 @@ export const MainPage = (): ReactElement => {
                   поездке.
                   <img
                     className={`${styles['quotation-mark']} ${styles['quotation-mark--end']}`}
-                    src="/assets/images/quotation-end.png"
+                    src={`${process.env.PUBLIC_URL}/assets/images/quotation-end.png`}
                     alt="Кавычка закрывается"
                   />
                 </p>
@@ -125,7 +125,7 @@ export const MainPage = (): ReactElement => {
         </div>
         <img
           className={styles['feedback-card__dots']}
-          src="/assets/images/feedback-dots.png"
+          src={`${process.env.PUBLIC_URL}/assets/images/feedback-dots.png`}
           alt="Feedback dots"
         />
       </section>

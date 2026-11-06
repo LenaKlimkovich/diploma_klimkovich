@@ -1,62 +1,19 @@
 import styles from './CheckPage.module.css';
-import { Outlet } from 'react-router-dom';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TrainTicket from '../../components/TrainTicket/TrainTicket';
-import { Passenger } from '../../components/PassengerForm/PassengerForm';
-
-const passengers: Passenger[] = [
-  {
-    id: 1,
-    type: 'adult',
-    lastName: 'Мартынюк',
-    firstName: 'Ирина',
-    middleName: 'Эдуардовна',
-    gender: 'F',
-    birthDate: '17.02.1985',
-    isLimitedMobility: false,
-    documentType: 'Паспорт РФ',
-    docSeries: '4204',
-    docNumber: '380694',
-    docError: '',
-  },
-  {
-    id: 2,
-    type: 'child',
-    lastName: 'Мартынюк',
-    firstName: 'Кирилл',
-    middleName: 'Сергеевич',
-    gender: 'M',
-    birthDate: '17.02.1985',
-    isLimitedMobility: false,
-    documentType: 'Свидетельство о рождении',
-    docSeries: '',
-    docNumber: 'VIII УН 256319',
-    docError: '',
-  },
-  {
-    id: 2,
-    type: 'child',
-    lastName: 'Мартынюк',
-    firstName: 'Кирилл',
-    middleName: 'Сергеевич',
-    gender: 'M',
-    birthDate: '17.02.1985',
-    isLimitedMobility: false,
-    documentType: 'Свидетельство о рождении',
-    docSeries: '',
-    docNumber: 'VIII УН 256319',
-    docError: '',
-  },
-];
+import { useAppSelector } from '../../store/hooks';
 
 export default function CheckPage(): React.ReactElement {
+  const selectedRoute = useAppSelector((state) => state.routes.selectedRoute);
+  const passengers = useAppSelector((state) => state.order.departure.seats);
+  const order = useAppSelector((state) => state.order);
   const navigate = useNavigate();
+
   return (
     <div className={styles.check__container}>
       <section className={styles.check__train}>
         <h3 className={styles.check__heading}>Поезд</h3>
-        <TrainTicket />
+        <TrainTicket route={selectedRoute} />
       </section>
       <section className={styles.check__passengers}>
         <h3 className={styles.check__heading}>Пассажиры</h3>
@@ -64,30 +21,32 @@ export default function CheckPage(): React.ReactElement {
           <div className={styles['check__passengers-list']}>
             {passengers.map((passenger, index) => {
               return (
-                <div key={passenger.id} className={styles.passenger__card}>
+                <div key={index} className={styles.passenger__card}>
                   <div className={styles['passenger__card-pic']}>
                     <img
-                      src="/assets/images/passenger-pic.png"
+                     src={`${process.env.PUBLIC_URL}/assets/images/passenger-pic.png`}
                       alt="Passenger"
                     />
-                    <p>{passenger.type === 'adult' ? 'Взрослый' : 'Десткий'}</p>
+                    <p>
+                      {passenger.person_info.is_adult ? 'Взрослый' : 'Десткий'}
+                    </p>
                   </div>
                   <div className={styles['passenger__details']}>
                     <p>
                       <span className={styles['passenger__full-name']}>
-                        {passenger.lastName} {passenger.firstName}{' '}
-                        {passenger.middleName}
+                        {passenger.person_info.last_name}{' '}
+                        {passenger.person_info.first_name}{' '}
+                        {passenger.person_info.patronymic}
                       </span>
                     </p>
                     <p>
-                      Пол {passenger.gender === 'M' ? 'мужской' : 'женский'}
+                      Пол {passenger.person_info.gender ? 'мужской' : 'женский'}
                     </p>
-                    <p>Дата рождения {passenger.birthDate}</p>
+                    <p>Дата рождения {passenger.person_info.birthday}</p>
                     <p>
-                      {passenger.documentType}{' '}
-                      {passenger.type === 'adult'
-                        ? `${passenger.docSeries} ${passenger.docNumber}`
-                        : passenger.docNumber}
+                      {passenger.person_info.is_adult
+                        ? `Паспорт РФ ${passenger.person_info.document_data}`
+                        : `Свидетельство о рождении ${passenger.person_info.document_data}`}
                     </p>
                   </div>
                 </div>
@@ -98,9 +57,14 @@ export default function CheckPage(): React.ReactElement {
             <div className={styles['check__total-price']}>
               <h3>Всего</h3>
               <p className={styles['check__total-rubles']}>
-                7 760{' '}
                 <span>
-                  <img src="/assets/images/ruble.png" />
+                  {order.prices.reduce((sum, item) => sum + item.price, 0)}{' '}
+                </span>
+                <span className={styles['check__rubles']}>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/assets/images/ruble.png`}
+                    alt="Rouble"
+                  />
                 </span>
               </p>
             </div>
@@ -120,7 +84,9 @@ export default function CheckPage(): React.ReactElement {
         <h3 className={styles.check__heading}>Оплата</h3>
         <div className={styles['check__payment-container']}>
           <div className={styles['check__payment-method']}>
-            <p>Наличными</p>
+            <p>
+              {order.user.payment_method === 'cash' ? 'наличными' : 'онлайн'}
+            </p>
           </div>
           <div className={styles['check__payment-change']}>
             <button

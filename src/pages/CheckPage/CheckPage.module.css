@@ -55,6 +55,7 @@
   flex-shrink: 0;
   width: 680px;
   border-right: 1px dashed rgba(229, 229, 229, 1);
+  text-transform: capitalize;
 }
 
 .check__payment-method {
@@ -71,16 +72,17 @@
   flex-shrink: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: end;
   justify-content: end;
-  padding-bottom: 25px;
+  padding: 0px 25px 25px 25px;
 }
 
 .check__total-price {
   display: flex;
-  width: 233px;
+  width: 100%;
+  height: 40px;
   justify-content: space-between;
-  align-items: center;
+  align-items: end;
 }
 
 .passenger__card {
@@ -144,7 +146,7 @@
   box-shadow: none;
   font-size: 24px;
   font-weight: 700;
-  margin-bottom: 21px;
+  margin-top: 28px;
 }
 
 .passenger__btn_change:hover {
@@ -163,9 +165,10 @@
 .check__total-rubles {
   font-size: 30px;
   font-weight: 700;
+  margin-top: auto;
 }
 
-.check__total-rubles span {
+.check__rubles {
   color: rgba(146, 143, 148, 1);
 }
 
@@ -200,4 +203,5 @@
   display: flex;
   justify-content: center;
   align-items: end;
+  padding: 0 23px 21px 25px;
 }

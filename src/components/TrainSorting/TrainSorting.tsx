@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import styles from './TrainSorting.module.css';
+import { useAppSelector } from '../../store/hooks';
+import { setSortBy, setLimit, setOffSet } from '../../store/slices/routesSlice';
+import { SortOption } from '../../store/slices/routesSlice';
+import { useAppDispatch } from '../../store/hooks';
 
-type SortOption = 'time' | 'price' | 'duration';
 type PerPageOption = number;
 
 interface OptionItem {
@@ -11,37 +14,44 @@ interface OptionItem {
 
 const sortingOptions: OptionItem[] = [
   { value: 'time', label: 'времени' },
-  { value: 'price', label: 'стоимости' },
+  { value: 'value', label: 'стоимости' },
   { value: 'duration', label: 'длительности' },
 ];
 
 const perPageOptions: PerPageOption[] = [5, 10, 20];
 
 export default function TrainSorting(): React.ReactElement {
-  const [sortBy, setSortBy] = useState<SortOption>('time');
-  const [perPage, setPerPage] = useState<PerPageOption>(5);
+  const dispatch = useAppDispatch();
+
+  const routes = useAppSelector((state) => state.routes);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const currentSort = routes.sortBy;
+  const currentLimit = routes.limit;
+
   const currentLabel =
-    sortingOptions.find((opt) => opt.value === sortBy)?.label || '';
+    sortingOptions.find((opt) => opt.value === currentSort)?.label || '';
 
   const handleSelectSorting = (value: SortOption) => {
-    setSortBy(value);
+    dispatch(setOffSet(0));
+    dispatch(setSortBy(value));
     setIsOpen(false);
   };
 
   const handleSelectPages = (value: PerPageOption) => {
-    setPerPage(value);
+    dispatch(setOffSet(0));
+    dispatch(setLimit(value));
   };
 
   return (
     <>
       <section className={styles.tickets__info}>
-        <div className={styles.tickets__found}>найдено 20</div>
+        <div className={styles.tickets__found}>
+          найдено {routes.total_count}
+        </div>
         <div className={styles.tickets__options}>
           <div className={styles.tickets__sorting}>
             <span className={styles.sorting__label}>сортировать по:</span>
-
             <div className={styles.dropdown}>
               <button
                 type="button"
@@ -57,7 +67,7 @@ export default function TrainSorting(): React.ReactElement {
                       <button
                         type="button"
                         className={`${styles.dropdown__item_btn} ${
-                          sortBy === opt.value
+                          currentSort === opt.value
                             ? styles.dropdown__item_btn_active
                             : ''
                         }`}
@@ -79,7 +89,9 @@ export default function TrainSorting(): React.ReactElement {
                   key={page}
                   type="button"
                   className={`${styles.ticketsperpage__option} ${
-                    perPage === page ? styles.ticketsperpage__option_active : ''
+                    currentLimit === page
+                      ? styles.ticketsperpage__option_active
+                      : ''
                   }`}
                   onClick={() => handleSelectPages(page)}
                 >

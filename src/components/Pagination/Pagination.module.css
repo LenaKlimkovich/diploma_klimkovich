@@ -1,11 +1,12 @@
 .pagination {
   display: flex;
-  width: 564px;
+  min-width: 564px;
   height: 75px;
   background-color: transparent;
   margin-top: 142px;
   gap: 35px;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .pagination__item {
@@ -29,6 +30,12 @@
   color: rgba(255, 168, 0, 1);
   filter: brightness(0) invert(87%) sepia(43%) saturate(738%) hue-rotate(334deg)
     brightness(101%) contrast(101%);
+}
+
+.pagination__item_active {
+  background-color: rgba(255, 168, 0, 1);
+  color: rgba(255, 255, 255, 1);
+  border: none;
 }
 
 .pagination__item_arrow_back {

@@ -1,16 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styles from './PassengerForm.module.css';
 
 export interface Passenger {
+  is_adult: boolean;
+  first_name: string;
+  last_name: string;
+  patronymic: string;
+  gender: boolean;
+  birthday: string;
+  document_type: string;
+  document_data: string;
+}
+
+interface FormPassenger extends Passenger {
   id: number;
-  type: 'adult' | 'child';
-  lastName: string;
-  firstName: string;
-  middleName: string;
-  gender: 'M' | 'F';
-  birthDate: string;
   isLimitedMobility: boolean;
-  documentType: string;
   docSeries: string;
   docNumber: string;
   docError: string;
@@ -18,22 +22,29 @@ export interface Passenger {
 
 interface PassengerFormProps {
   onValidityChange: (isValid: boolean) => void;
+  onPassengersChange: (passengers: Passenger[]) => void;
 }
+
+const REGEXP_DIGITS = /^\d+$/;
+const REGEXP_PASSPORT = /^\d{6}$/;
+const REGEXP_BIRTH = /^[I-X]{1,4}-[А-ЯЁ]{2}-\d{6}$/i;
 
 export default function PassengerForm({
   onValidityChange,
-}: PassengerFormProps) {
-  const [passengers, setPassengers] = useState<Passenger[]>([
+  onPassengersChange,
+}: PassengerFormProps): React.ReactElement {
+  const [passengers, setPassengers] = useState<FormPassenger[]>([
     {
       id: 1,
-      type: 'adult',
-      lastName: '',
-      firstName: '',
-      middleName: '',
-      gender: 'M',
-      birthDate: '',
+      is_adult: true,
+      first_name: '',
+      last_name: '',
+      patronymic: '',
+      gender: true,
+      birthday: '',
+      document_type: 'паспорт',
+      document_data: '',
       isLimitedMobility: false,
-      documentType: 'Паспорт РФ',
       docSeries: '',
       docNumber: '',
       docError: '',
@@ -43,40 +54,106 @@ export default function PassengerForm({
   const [activeSelectId, setActiveSelectId] = useState<number | null>(null);
   const [openTabs, setOpenTabs] = useState<number[]>([1]);
 
-  const updatePassengerField = (
+  const validatePassenger = (p: FormPassenger): boolean => {
+    const baseValid =
+      p.last_name.trim() !== '' &&
+      p.first_name.trim() !== '' &&
+      p.birthday.trim() !== '' &&
+      p.document_data.trim() !== '';
+
+    const cleanDoc = p.document_data.replace(/\s/g, '');
+
+    if (p.is_adult) {
+      return (
+        baseValid && cleanDoc.length === 10 && REGEXP_DIGITS.test(cleanDoc)
+      );
+    }
+    return baseValid && p.document_data.trim().length >= 14;
+  };
+
+  const syncWithParent = (currentPassengers: FormPassenger[]) => {
+    const nextFormValid = currentPassengers.every(validatePassenger);
+    onValidityChange(nextFormValid);
+
+    const cleanData: Passenger[] = currentPassengers.map(
+      ({ id, isLimitedMobility, docSeries, docNumber, docError, ...rest }) =>
+        rest
+    );
+    onPassengersChange(cleanData);
+  };
+
+  const handleFieldChange = (
     id: number,
-    field: keyof Passenger,
+    field: keyof FormPassenger,
     value: any
   ) => {
-    setPassengers((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, [field]: value } : p))
-    );
+    const nextPassengers = passengers.map((p) => {
+      if (p.id !== id) return p;
+
+      let updatedFields: Partial<FormPassenger> = { [field]: value };
+
+      if (field === 'is_adult') {
+        updatedFields = {
+          is_adult: value,
+          document_type: value ? 'паспорт' : 'свидетельство',
+          docSeries: '',
+          docNumber: '',
+          document_data: '',
+          docError: '',
+        };
+      }
+
+      const currentPassenger = { ...p, ...updatedFields };
+
+      if (
+        field === 'docSeries' ||
+        field === 'docNumber' ||
+        field === 'is_adult'
+      ) {
+        currentPassenger.document_data = currentPassenger.is_adult
+          ? `${currentPassenger.docSeries} ${currentPassenger.docNumber}`.trim()
+          : currentPassenger.docNumber.trim();
+      }
+
+      return currentPassenger;
+    });
+
+    setPassengers(nextPassengers);
+    syncWithParent(nextPassengers);
   };
 
   const handleAddPassenger = () => {
     const newId =
       passengers.length > 0 ? Math.max(...passengers.map((p) => p.id)) + 1 : 1;
-    const newPassenger: Passenger = {
+    const newPassenger: FormPassenger = {
       id: newId,
-      type: 'adult',
-      lastName: '',
-      firstName: '',
-      middleName: '',
-      gender: 'M',
-      birthDate: '',
+      is_adult: true,
+      first_name: '',
+      last_name: '',
+      patronymic: '',
+      gender: true,
+      birthday: '',
+      document_type: 'паспорт',
+      document_data: '',
       isLimitedMobility: false,
-      documentType: 'Паспорт РФ',
       docSeries: '',
       docNumber: '',
       docError: '',
     };
-    setPassengers((prev) => [...prev, newPassenger]);
+
+    const nextPassengers = [...passengers, newPassenger];
+    setPassengers(nextPassengers);
     setOpenTabs((prev) => [...prev, newId]);
+    syncWithParent(nextPassengers);
   };
 
   const handleRemovePassenger = (id: number) => {
-    setPassengers((prev) => prev.filter((p) => p.id !== id));
+    if (passengers.length <= 1) return;
+
+    const nextPassengers = passengers.filter((p) => p.id !== id);
+    setPassengers(nextPassengers);
     setOpenTabs((prev) => prev.filter((tabId) => tabId !== id));
+    syncWithParent(nextPassengers);
   };
 
   const handleToggleInfo = (id: number) => {
@@ -87,64 +164,14 @@ export default function PassengerForm({
     );
   };
 
-  const regExpPassport = /^\d{6}$/;
-  const regExpBirth = /^[I-X]{1,4}-[А-ЯЁ]{2}-\d{6}$/;
-
-  const isFormValid = passengers.every((p) => {
-    const baseValid =
-      p.lastName.trim() !== '' &&
-      p.firstName.trim() !== '' &&
-      p.birthDate.trim() !== '' &&
-      p.docNumber.trim() !== '' &&
-      !p.docError;
-
-    if (p.type === 'adult') {
-      return (
-        baseValid &&
-        p.docSeries &&
-        p.docSeries.trim() !== '' &&
-        p.docNumber.length === 6 &&
-        /^\d+$/.test(p.docNumber)
-      );
-    }
-    return baseValid && p.docNumber.length >= 12;
-  });
-
-  const isCardValid = (p: Passenger) => {
-    const baseValid =
-      p.lastName.trim() !== '' &&
-      p.firstName.trim() !== '' &&
-      p.birthDate.trim() !== '' &&
-      p.docNumber.trim() !== '' &&
-      !p.docError;
-
-    if (p.type === 'adult') {
-      return (
-        baseValid &&
-        p.docSeries &&
-        p.docSeries.trim() !== '' &&
-        p.docNumber.length === 6 &&
-        /^\d+$/.test(p.docNumber)
-      );
-    }
-
-    return baseValid && p.docNumber.length >= 12;
-  };
-
-  useEffect(() => {
-    onValidityChange(isFormValid);
-  }, [isFormValid, onValidityChange]);
-
   return (
     <div className={styles.passenger}>
       {passengers.map((passenger, index) => {
         const isCurrentTabOpen = openTabs.includes(passenger.id);
-
-        const isCurrentCardValid = isCardValid(passenger);
+        const isCurrentCardValid = validatePassenger(passenger);
 
         return (
           <div key={passenger.id} className={styles.passenger__card}>
-            {/* Шапка карточки */}
             <div className={styles.passenger__header}>
               <h3 className={styles['passenger__header-title']}>
                 <div
@@ -154,19 +181,25 @@ export default function PassengerForm({
                       : styles['passenger__icon-plus']
                   }
                   onClick={() => handleToggleInfo(passenger.id)}
-                  style={{ cursor: 'pointer', marginRight: '8px' }}
+                  style={{
+                    cursor: 'pointer',
+                    marginRight: '8px',
+                    userSelect: 'none',
+                  }}
                 >
                   {isCurrentTabOpen ? '–' : '+'}
                 </div>
                 Пассажир {index + 1}
               </h3>
-              <button
-                type="button"
-                className={styles.passenger__btn_close}
-                onClick={() => handleRemovePassenger(passenger.id)}
-              >
-                ×
-              </button>
+              {passengers.length > 1 && (
+                <button
+                  type="button"
+                  className={styles.passenger__btn_close}
+                  onClick={() => handleRemovePassenger(passenger.id)}
+                >
+                  ×
+                </button>
+              )}
             </div>
 
             {isCurrentTabOpen && (
@@ -180,7 +213,7 @@ export default function PassengerForm({
                       )
                     }
                   >
-                    {passenger.type === 'adult' ? 'Взрослый' : 'Детский'}
+                    {passenger.is_adult ? 'Взрослый' : 'Детский'}
                     <span className={styles.passenger__select_arrow}>▼</span>
                   </div>
                   {activeSelectId === passenger.id && (
@@ -188,7 +221,7 @@ export default function PassengerForm({
                       <div
                         className={styles.passenger__dropdown_item}
                         onClick={() => {
-                          updatePassengerField(passenger.id, 'type', 'child');
+                          handleFieldChange(passenger.id, 'is_adult', false);
                           setActiveSelectId(null);
                         }}
                       >
@@ -197,7 +230,7 @@ export default function PassengerForm({
                       <div
                         className={styles.passenger__dropdown_item}
                         onClick={() => {
-                          updatePassengerField(passenger.id, 'type', 'adult');
+                          handleFieldChange(passenger.id, 'is_adult', true);
                           setActiveSelectId(null);
                         }}
                       >
@@ -207,18 +240,18 @@ export default function PassengerForm({
                   )}
                 </div>
 
-                {/* ФИО ряд */}
+                {/* Ряд ФИО */}
                 <div className={styles.passenger__grid_three}>
                   <div className={styles.passenger__input_group}>
                     <label className={styles.passenger__label}>Фамилия</label>
                     <input
                       type="text"
                       className={styles.passenger__input}
-                      value={passenger.lastName}
+                      value={passenger.last_name}
                       onChange={(e) =>
-                        updatePassengerField(
+                        handleFieldChange(
                           passenger.id,
-                          'lastName',
+                          'last_name',
                           e.target.value
                         )
                       }
@@ -229,11 +262,11 @@ export default function PassengerForm({
                     <input
                       type="text"
                       className={styles.passenger__input}
-                      value={passenger.firstName}
+                      value={passenger.first_name}
                       onChange={(e) =>
-                        updatePassengerField(
+                        handleFieldChange(
                           passenger.id,
-                          'firstName',
+                          'first_name',
                           e.target.value
                         )
                       }
@@ -244,11 +277,11 @@ export default function PassengerForm({
                     <input
                       type="text"
                       className={styles.passenger__input}
-                      value={passenger.middleName}
+                      value={passenger.patronymic}
                       onChange={(e) =>
-                        updatePassengerField(
+                        handleFieldChange(
                           passenger.id,
-                          'middleName',
+                          'patronymic',
                           e.target.value
                         )
                       }
@@ -258,57 +291,54 @@ export default function PassengerForm({
 
                 {/* Пол и Дата Рождения */}
                 <div className={styles.passenger__grid_flex}>
-                  <div className={styles.passenger__input_gender}>
+                  <div className={styles.passenger__input_group}>
                     <label className={styles.passenger__label}>Пол</label>
                     <div className={styles.passenger__gender_toggle}>
                       <button
                         type="button"
-                        className={`${styles.passenger__gender_btn} ${passenger.gender === 'M' ? styles['passenger__gender_btn--active'] : ''}`}
+                        className={`${styles.passenger__gender_btn} ${passenger.gender ? styles['passenger__gender_btn--active'] : ''}`}
                         onClick={() =>
-                          updatePassengerField(passenger.id, 'gender', 'M')
+                          handleFieldChange(passenger.id, 'gender', true)
                         }
                       >
                         М
                       </button>
                       <button
                         type="button"
-                        className={`${styles.passenger__gender_btn} ${passenger.gender === 'F' ? styles['passenger__gender_btn--active'] : ''}`}
+                        className={`${styles.passenger__gender_btn} ${!passenger.gender ? styles['passenger__gender_btn--active'] : ''}`}
                         onClick={() =>
-                          updatePassengerField(passenger.id, 'gender', 'F')
+                          handleFieldChange(passenger.id, 'gender', false)
                         }
                       >
                         Ж
                       </button>
                     </div>
                   </div>
-
                   <div className={styles.passenger__input_birth}>
                     <label className={styles.passenger__label}>
                       Дата рождения
                     </label>
                     <input
-                      type="text"
-                      placeholder="ДД/ММ/ГГГГ"
+                      type="date"
+                      placeholder="ДД/ММ/ГГ"
                       className={styles.passenger__input_short}
-                      value={passenger.birthDate}
+                      value={passenger.birthday}
                       onChange={(e) =>
-                        updatePassengerField(
+                        handleFieldChange(
                           passenger.id,
-                          'birthDate',
+                          'birthday',
                           e.target.value
                         )
                       }
                     />
                   </div>
                 </div>
-
-                {/* Чекбокс подвижности */}
                 <label className={styles.passenger__checkbox_label}>
                   <input
                     type="checkbox"
                     checked={passenger.isLimitedMobility}
                     onChange={(e) =>
-                      updatePassengerField(
+                      handleFieldChange(
                         passenger.id,
                         'isLimitedMobility',
                         e.target.checked
@@ -322,7 +352,7 @@ export default function PassengerForm({
                 {/* Документы */}
                 <div
                   className={`${styles.passenger__grid_docs} ${
-                    passenger.type === 'adult'
+                    passenger.is_adult
                       ? styles.passenger__grid_adult
                       : styles.passenger__grid_child
                   }`}
@@ -332,12 +362,13 @@ export default function PassengerForm({
                       Тип документа
                     </label>
                     <div className={styles.passenger__select_trigger}>
-                      {passenger.type === 'adult'
+                      {passenger.is_adult
                         ? 'Паспорт РФ'
                         : 'Свидетельство о рождении'}
                     </div>
                   </div>
-                  {passenger.type === 'adult' && (
+
+                  {passenger.is_adult && (
                     <div className={styles.passenger__input_group}>
                       <label className={styles.passenger__label}>Серия</label>
                       <input
@@ -347,7 +378,7 @@ export default function PassengerForm({
                         maxLength={4}
                         value={passenger.docSeries}
                         onChange={(e) =>
-                          updatePassengerField(
+                          handleFieldChange(
                             passenger.id,
                             'docSeries',
                             e.target.value
@@ -356,114 +387,46 @@ export default function PassengerForm({
                       />
                     </div>
                   )}
+
                   <div className={styles.passenger__input_group}>
                     <label className={styles.passenger__label}>Номер</label>
                     <div className={styles.passenger__input_wrapper}>
                       <input
                         type="text"
-                        placeholder={
-                          passenger.type === 'child' ? '' : '_ _ _ _ _ _'
-                        }
-                        className={`${styles.passenger__input} ${passenger.type}`}
+                        placeholder={passenger.is_adult ? '_ _ _ _ _ _' : ''}
+                        className={`${styles.passenger__input} ${passenger.is_adult ? styles.passenger__input_adult : ''}`}
                         value={passenger.docNumber}
+                        maxLength={passenger.is_adult ? 6 : 14}
                         onChange={(e) => {
-                          let value = e.target.value;
+                          const value = e.target.value;
 
-                          if (passenger.type === 'child') {
-                            value = value.toUpperCase();
-                          }
-                          updatePassengerField(
-                            passenger.id,
-                            'docNumber',
-                            value
-                          );
-                        }}
-                        onKeyDown={(e) => {
-                          if (
-                            passenger.type === 'adult' &&
-                            passenger.docNumber
-                          ) {
-                            if (
-                              (e.key === 'Enter' &&
-                                passenger.docNumber.length < 6) ||
-                              passenger.docNumber.length > 5 ||
-                              (e.key === 'Enter' &&
-                                e.currentTarget.value.length === 6 &&
-                                !regExpPassport.test(passenger.docNumber))
-                            ) {
-                              e.preventDefault();
+                          handleFieldChange(passenger.id, 'docNumber', value);
 
-                              updatePassengerField(
-                                passenger.id,
-                                'docError',
-                                'Номер паспорта должен содержать 6 цифр'
-                              );
-                              updatePassengerField(
-                                passenger.id,
-                                'docNumber',
-                                ''
-                              );
-                            }
+                          if (
+                            passenger.is_adult &&
+                            value.length === 6 &&
+                            REGEXP_PASSPORT.test(value) === false
+                          ) {
+                            handleFieldChange(
+                              passenger.id,
+                              'docError',
+                              'Номер паспорта должен содержать 6 цифр'
+                            );
                           }
                           if (
-                            passenger.type === 'child' &&
-                            passenger.docNumber
+                            !passenger.is_adult &&
+                            value.length === 14 &&
+                            REGEXP_BIRTH.test(value) === false
                           ) {
-                            if (
-                              (e.key === 'Enter' &&
-                                passenger.docNumber.length < 12) ||
-                              (e.key === 'Enter' &&
-                                e.currentTarget.value.length === 12 &&
-                                !regExpBirth.test(passenger.docNumber))
-                            ) {
-                              e.preventDefault();
-
-                              updatePassengerField(
-                                passenger.id,
-                                'docError',
-                                'Номер свидетельства о рождении указан некорректно Пример: VIII-ЫП-123456'
-                              );
-                            }
-                          }
-                        }}
-                        onBlur={() => {
-                          if (
-                            passenger.type === 'adult' &&
-                            passenger.docNumber
-                          ) {
-                            if (!regExpPassport.test(passenger.docNumber)) {
-                              updatePassengerField(
-                                passenger.id,
-                                'docError',
-                                'Номер паспорта должен содержать 6 цифр'
-                              );
-                              updatePassengerField(
-                                passenger.id,
-                                'docNumber',
-                                ''
-                              );
-                            }
-                          }
-                          if (
-                            passenger.type === 'child' &&
-                            passenger.docNumber
-                          ) {
-                            if (!regExpBirth.test(passenger.docNumber)) {
-                              updatePassengerField(
-                                passenger.id,
-                                'docError',
-                                'Номер свидетельства о рождении указан некорректно Пример: VIII-ЫП-123456'
-                              );
-                              updatePassengerField(
-                                passenger.id,
-                                'docNumber',
-                                ''
-                              );
-                            }
+                            handleFieldChange(
+                              passenger.id,
+                              'docError',
+                              'Номер свидетельства о рождении указан некорректно. Пример: VIII-ЫП-123456'
+                            );
                           }
                         }}
                       />
-                      {!passenger.docNumber && passenger.type === 'child' && (
+                      {!passenger.docNumber && !passenger.is_adult && (
                         <div className={styles.passenger__custom_placeholder}>
                           <span>12 символов</span>
                           <span className={styles.passenger__sub_text}>
@@ -475,11 +438,7 @@ export default function PassengerForm({
                   </div>
                 </div>
                 <div
-                  className={
-                    isCurrentCardValid
-                      ? styles.card__footer_valid
-                      : styles.card__footer
-                  }
+                  className={`${styles.card__footer} ${isCurrentCardValid ? styles.card__footer_valid : ''}`}
                 >
                   {isCurrentCardValid && (
                     <div className={styles.card__ready}>
@@ -487,13 +446,14 @@ export default function PassengerForm({
                       <p>Готово</p>
                     </div>
                   )}
-                  {passengers.some((p) => p.docError) ? (
+                  {passenger.docError !== '' && (
                     <div className={styles.passenger__error_message}>
                       <div
                         className={styles.passenger__error_close}
                         onClick={() => {
-                          updatePassengerField(passenger.id, 'docError', '');
+                          handleFieldChange(passenger.id, 'docError', '');
                         }}
+                        style={{ cursor: 'pointer' }}
                       >
                         ✖
                       </div>
@@ -502,7 +462,8 @@ export default function PassengerForm({
                       </p>
                       <div className={styles.passenger__error_example}></div>
                     </div>
-                  ) : (
+                  )}
+                  {(isCurrentCardValid || passenger.docError === '') && (
                     <button
                       type="button"
                       className={
@@ -510,6 +471,11 @@ export default function PassengerForm({
                           ? styles.passenger__next_valid
                           : styles.passenger__next
                       }
+                      onClick={() => {
+                        if (isCurrentCardValid) {
+                          handleToggleInfo(passenger.id);
+                        }
+                      }}
                     >
                       Следующий пассажир
                     </button>

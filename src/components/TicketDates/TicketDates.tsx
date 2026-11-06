@@ -1,14 +1,33 @@
 import { ReactElement } from 'react';
-import DatePicker from 'react-datepicker';
+import DatePicker, { registerLocale } from 'react-datepicker';
 import styles from './TicketDates.module.css';
+import { useMemo } from 'react';
+
+import { ru } from 'date-fns/locale/ru';
+
+registerLocale('ru', ru as any);
 
 interface TicketDatesProps {
-  dateTo: Date | null;
-  dateFrom: Date | null;
+  dateTo: string;
+  dateFrom: string;
   onChangeDateTo: (date: Date | null) => void;
   onChangeDateFrom: (date: Date | null) => void;
   variant: 'home' | 'tickets_page' | 'sidebar';
 }
+
+const parseTimestampToDate = (
+  dateVal: string | null | undefined
+): Date | null => {
+  if (!dateVal || dateVal.trim() === '') return null;
+  const timestamp = Number(dateVal);
+
+  if (!isNaN(timestamp)) {
+    const parsedDate = new Date(timestamp * 1000);
+    return isNaN(parsedDate.getTime()) ? null : parsedDate;
+  }
+
+  return null;
+};
 
 export default function TicketDates({
   dateTo,
@@ -57,6 +76,14 @@ export default function TicketDates({
   const computedInputClassName = `${resolvedInputClass} ${styles['ticket-form__input_type_date']}`;
   const containerClassName = styles[`ticket-form__dates_${variant}`];
 
+  const validDateFrom = useMemo(
+    () => parseTimestampToDate(dateFrom),
+    [dateFrom]
+  );
+  const validDateTo = useMemo(() => parseTimestampToDate(dateTo), [dateTo]);
+
+  const today = useMemo(() => new Date(), []);
+
   return (
     <div className={containerClassName}>
       {/* ПЕРВЫЙ ИНПУТ: Дата поездки (Туда) */}
@@ -67,27 +94,24 @@ export default function TicketDates({
           )}
           <DatePicker
             locale="ru"
-            selected={
-              dateFrom
-            } /* ИСПРАВЛЕНО: Для даты "Туда" используем dateFrom */
-            onChange={onChangeDateFrom}
+            selected={validDateFrom}
+            onChange={(date: Date | null) => {
+              if (date?.getTime() !== validDateFrom?.getTime()) {
+                onChangeDateFrom(date);
+              }
+            }}
             placeholderText="ДД/ММ/ГГГГ"
             className={computedInputClassName}
             dateFormat="dd.MM.yyyy"
-            minDate={new Date()} /* Минимальная дата — сегодня */
-            maxDate={
-              dateTo || undefined
-            } /* ИСПРАВЛЕНО: Нельзя выбрать дату "Туда" позже, чем "Обратно" */
+            minDate={today}
             popperPlacement="bottom"
-            /* ДОБАВЛЕНО: Передаем класс из стилей для кастомной стрелочки */
             popperClassName={styles['ticket-form__calendar-popper']}
-            openToDate={dateFrom || new Date()}
-            required
+            openToDate={validDateFrom || today}
             renderCustomHeader={renderCustomHeader}
           />
           <img
             className={styles['ticket-form__icon-calendar']}
-            src="/assets/images/calendar.png"
+            src={`${process.env.PUBLIC_URL}/assets/images/calendar.png`}
             alt="Calendar"
           />
         </div>
@@ -103,21 +127,24 @@ export default function TicketDates({
           )}
           <DatePicker
             locale="ru"
-            selected={dateTo}
-            onChange={onChangeDateTo}
+            selected={validDateTo}
+            onChange={(date: Date | null) => {
+              if (date?.getTime() !== validDateTo?.getTime()) {
+                onChangeDateTo(date);
+              }
+            }}
             placeholderText="ДД/ММ/ГГГГ"
             className={computedInputClassName}
             dateFormat="dd.MM.yyyy"
-            minDate={dateFrom || new Date()}
+            minDate={validDateFrom || today}
             popperPlacement="bottom"
             popperClassName={styles['ticket-form__calendar-popper']}
-            openToDate={dateTo || dateFrom || new Date()}
-            required
+            openToDate={validDateTo || today}
             renderCustomHeader={renderCustomHeader}
           />
           <img
             className={styles['ticket-form__icon-calendar']}
-            src="/assets/images/calendar.png"
+            src={`${process.env.PUBLIC_URL}/assets/images/calendar.png`}
             alt="Calendar"
           />
         </div>

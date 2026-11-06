@@ -10,8 +10,8 @@
   min-width: 729px;
   height: 100%;
   background-color: rgba(41, 41, 41, 0.8);
-  margin-left: 110px;
-  margin-right: 0;
+  /* margin-left: 110px; */
+  /* margin-right: 0; */
   padding: 0 22px 0 22px;
 }
 
@@ -127,6 +127,7 @@
   border: 1px solid #e5e5e5;
   background-color: #ffffff;
   outline: none;
+  text-transform: capitalize;
 }
 
 /* Стилизация плейсхолдеров для обычного инпута и для инпута даты */
@@ -153,6 +154,13 @@
   margin-top: 92px;
   align-items: end;
   cursor: pointer;
+}
+
+.ticket-form__submit.loading,
+.ticket-form__submit.loading:hover,
+.ticket-form__submit.loading:active {
+  color: rgba(255, 168, 0, 1);
+  background-color: transparent;
 }
 
 .ticket-form__submit:hover {

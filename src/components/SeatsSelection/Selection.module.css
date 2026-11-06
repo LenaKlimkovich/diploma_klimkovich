@@ -1,7 +1,7 @@
 .seats-selection {
   display: flex;
   flex-direction: column;
-  max-height: 1774px;
+  height: auto;
   width: 100%;
   margin-bottom: 29px;
   border: rgba(196, 196, 196, 1) 1px solid;
@@ -17,6 +17,7 @@
   padding-left: 19px;
   background-color: #fff;
 }
+
 .seats-selection__back_return {
   display: flex;
   height: 128px;
@@ -25,6 +26,10 @@
   justify-content: end;
   padding-right: 24px;
   background-color: #fff;
+}
+
+.train-info__arrow-to_return {
+  transform: rotate(180deg);
 }
 
 .seats-selection__back-arrow_return {
@@ -91,7 +96,6 @@
   border-bottom: 1px dashed rgba(196, 196, 196, 1);
 }
 
-/* Оранжевая квадратная плашка-контейнер */
 .seats-selection__back-arrow {
   width: 76px;
   height: 60px;
@@ -152,13 +156,14 @@
 .train-info__route {
   display: flex;
   flex-direction: column;
-
+  text-transform: capitalize;
   font-size: 16px;
   line-height: 1.3;
 }
 
 .train-info__station {
   font-size: 18px;
+  text-transform: capitalize;
 }
 
 .train-info__route > *:first-child {
@@ -182,7 +187,18 @@
   padding-left: 36px;
 }
 
-.ticket-counter:hover {
+.ticket-counter.ticket-counter_active {
+  &:hover {
+    background-color: rgba(247, 246, 246, 1);
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+    width: 317px;
+  }
+  .ticket-counter__input {
+    background-color: #fff;
+  }
+  .ticket-counter__row {
+    background-color: rgba(255, 255, 255, 1);
+  }
   background-color: rgba(247, 246, 246, 1);
   box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
   width: 317px;
@@ -217,6 +233,24 @@
   align-items: center;
   padding-left: 17px;
   margin-bottom: 23px;
+  position: relative;
+}
+
+.ticket-counter__label {
+  white-space: nowrap;
+}
+.ticket-counter__input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 18px;
+  -moz-appearance: textfield;
+}
+
+.ticket-counter__input::-webkit-outer-spin-button,
+.ticket-counter__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .ticket-counter {
@@ -226,11 +260,6 @@
   padding-left: 43px;
   padding-right: 35px;
   &:hover {
-    .ticket-counter__row {
-      background-color: rgba(255, 255, 255, 1);
-    }
-  }
-  &:active {
     border: 1px solid rgba(255, 168, 0, 0.79);
     box-shadow: none;
     background-color: rgba(255, 255, 255, 1);
@@ -255,17 +284,17 @@
   margin-bottom: 0;
 }
 
-/* Табы выбора типа вагона */
 .seats-selection__tabs {
+  min-width: 153px;
   width: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding-left: 35px;
   padding-bottom: 26px;
   padding-right: 120px;
   color: rgba(146, 143, 148, 1);
   font-size: 24px;
+  gap: 130px;
 }
 
 .seats-selection__car-type {
@@ -316,14 +345,10 @@
 .seats-selection__wagon-selector {
   display: flex;
   flex-direction: column;
-  align-items: end;
+  align-items: start;
   width: 100%;
   overflow: hidden;
   background: rgba(255, 255, 255, 1);
-}
-
-.wagon-detail__seats-info {
-  display: flex;
 }
 
 .wagon-selector__header {
@@ -342,72 +367,6 @@
   padding-left: 34px;
 }
 
-.wagon-selector__direction {
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.amenities-title {
-  display: flex;
-  gap: 8px;
-  font-size: 18px;
-  margin-bottom: 17px;
-}
-
-.wagon-detail__price {
-  color: rgba(146, 143, 148, 1);
-  font-size: 18px;
-}
-
-.wagon-detail__sum {
-  font-size: 24px;
-  font-weight: 700;
-}
-
-.wagon-detail__seats-number {
-  font-size: 18px;
-  color: rgba(146, 143, 148, 1);
-}
-
-.wagon-detail__seats-number span {
-  color: rgba(0, 0, 0, 1);
-}
-
-.wagon-detail__seats {
-  font-size: 24px;
-  color: rgba(146, 143, 148, 1);
-}
-
-.wagon-detail__seats strong {
-  color: rgba(0, 0, 0, 1);
-}
-
-.wagon-detail__seats strong {
-  font-weight: 700;
-}
-
-.amenities-services {
-  color: rgba(146, 143, 148, 1);
-}
-
-.amenities {
-  display: flex;
-  gap: 13px;
-}
-
-.wagon-add-info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(243, 243, 243, 1);
-  height: 72px;
-  width: 199px;
-  border-radius: 5px;
-  font-size: 16px;
-  margin-right: 42px;
-  text-align: center;
-}
-
 .wagon-btn {
   background: none;
   border: none;
@@ -423,169 +382,7 @@
   color: rgba(255, 255, 255, 1);
 }
 
-/* Детализация вагона */
-.wagon-detail {
-  display: flex;
-  height: 161px;
-  width: 100%;
-  background: #ffffff;
-}
-
-.wagon-detail__number-block {
-  width: 190px;
-  background: rgba(255, 217, 143, 1);
-  height: 100%;
-  display: flex;
-  flex-shrink: 0;
-  flex-direction: column;
-  justify-content: center;
-  padding-left: 37px;
-}
-
-.wagon-detail__huge-number {
-  font-size: 72px;
-  font-weight: 700;
-}
-
-.wagon-detail__label {
-  font-size: 24px;
-}
-
-.wagon-detail__info-grid {
-  display: flex;
-  justify-content: space-between;
-  padding: 33px 59px 17px 85px;
-  width: 100%;
-}
-
-.wagon-detail__info-column {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 16px;
-  line-height: 0.8;
-}
-
-.wagon-detail__info-column:first-of-type {
-  margin-right: 113px;
-}
-
-.wagon-detail__amenities {
-  margin-left: 93px;
-}
-
-.wagon-map {
-  width: 100%;
-  padding: 0 19px 0 19px;
-}
-
-.ticket-price {
-  color: rgba(255, 168, 0, 1);
-  font-size: 24px;
-  font-weight: 700;
-  margin: 19px 32px 28px 0;
-}
-
-.ticket-price span {
-  margin-left: 5px;
-  color: rgba(146, 143, 148, 1);
-  font-weight: 400;
-}
-
-.amenity {
-  width: 36px;
-  height: 34.11px;
-  background-color: #ffffff;
-  border: 1px solid rgba(41, 41, 41, 1);
-  border-radius: 5px;
-  position: relative;
-  cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease;
-  position: relative;
-}
-
-.amenity::before {
-  content: '';
+.warning__noseat {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #000000;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  -webkit-mask-size: 20px 20px;
-  mask-size: 20px 20px;
-
-  transition: background-color 0.2s ease;
-}
-
-.amenity.air-conditioning::before {
-  -webkit-mask-image: url('/public/assets/images/air-conditioning.svg');
-  mask-image: url('/public/assets/images/air-conditioning.svg');
-}
-
-.amenity.wifi::before {
-  -webkit-mask-image: url('/public/assets/images/wi-fi-black.svg');
-  mask-image: url('/public/assets/images/wi-fi-black.svg');
-}
-
-.amenity.bedding::before {
-  -webkit-mask-image: url('/public/assets/images/bedding-black.svg');
-  mask-image: url('/public/assets/images/bedding-black.svg');
-}
-
-.amenity.drinks::before {
-  -webkit-mask-image: url('/public/assets/images/cup-black.svg');
-  mask-image: url('/public/assets/images/cup.svg');
-}
-
-.amenity:hover {
-  background-color: rgba(255, 168, 0, 1);
-  border-color: rgba(41, 41, 41, 1);
-}
-.amenity:hover::before {
-  background-color: #000000;
-}
-
-.amenity_active,
-.amenity_active:hover {
-  background-color: rgba(253, 185, 53, 1);
-  border-color: rgba(253, 185, 53, 1);
-}
-
-.amenity_active::before,
-.amenity_active:hover::before {
-  background-color: #ffffff;
-}
-
-.amenity::after {
-  content: attr(data-title);
-  position: absolute;
-  top: calc(100% + 3px);
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  background-color: rgba(245, 244, 246, 1);
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  color: rgba(41, 41, 41, 1);
-  font-size: 14px;
-  padding: 6px 10px;
-  border-radius: 5px;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.amenity:hover::after,
-.amenity:focus-visible::after {
-  opacity: 1;
-  visibility: visible;
+  top: 50px;
 }

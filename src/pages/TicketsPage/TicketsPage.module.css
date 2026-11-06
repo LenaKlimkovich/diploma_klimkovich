@@ -1,22 +1,49 @@
 .tickets {
   width: 100%;
   height: auto;
+  min-height: 774px;
   padding: 95px 258px 193px 258px;
   display: flex;
   flex: 1;
+  position: relative;
 }
 
 .tickets__aside {
   width: 364px;
-  height: 100%;
   margin-right: 84px;
   flex-shrink: 0;
 }
 
 .tickets__container {
   width: 960px;
-  height: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
-  align-items: end;
+  align-items: flex-end;
+  flex-grow: 1;
+}
+
+.tickets__loadingOverlay {
+  position: absolute;
+  top: -98px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 261px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(62, 60, 65, 1);
+  background-image: url('/public/assets/images/loading.gif');
+  background-repeat: no-repeat;
+  background-position: center 10%;
+  z-index: 10;
+}
+
+.tickets__loadingText {
+  text-transform: uppercase;
+  color: rgba(146, 143, 148, 1);
+  font-size: 24px;
+  font-weight: 700;
 }

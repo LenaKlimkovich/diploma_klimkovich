@@ -1,0 +1,37 @@
+.wagon-map {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  width: 100%;
+  padding: 0 19px 32px 19px;
+}
+
+.wagon-add-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(243, 243, 243, 1);
+  height: 72px;
+  width: 199px;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-right: 42px;
+  text-align: center;
+}
+
+.text {
+  text-align: center;
+}
+
+.ticket-price {
+  color: rgba(255, 168, 0, 1);
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 25px;
+}
+
+.ticket-price span {
+  margin-left: 5px;
+  color: rgba(146, 143, 148, 1);
+  font-weight: 400;
+}

@@ -1,9 +1,10 @@
 {
   "name": "diploma_klimkovich",
   "version": "0.1.0",
-  "type": "module",
+  "homepage": "https://LenaKlimkovich.github.io/diploma_klimkovich",
   "private": true,
   "dependencies": {
+    "@reduxjs/toolkit": "^2.13.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
@@ -13,6 +14,7 @@
     "react": "^19.2.8",
     "react-datepicker": "^9.1.0",
     "react-dom": "^19.2.8",
+    "react-redux": "^9.3.0",
     "react-router-dom": "^7.18.3",
     "react-router-hash-link": "^2.4.3",
     "react-scripts": "5.0.1",
@@ -24,7 +26,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
-    "prettier": "prettier --write  ."
+    "prettier": "prettier --write  .",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "browserslist": {
     "production": [
@@ -51,6 +55,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.4.12",
+    "gh-pages": "^6.3.0",
     "globals": "^17.12.0",
     "prettier": "^3.9.6",
     "typescript": "^4.9.5"

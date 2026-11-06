@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: flex-start;
   width: 360px;
-  min-height: 1279px;
+  height: auto;
   background-color: #3e3c41;
   color: #ffffff;
   font-family: Arial, sans-serif;
@@ -25,6 +25,7 @@
 }
 
 .trip-details__section {
+  height: auto;
   border-top: 1px solid rgba(229, 229, 229, 1);
   padding: 22px 26px 0 26px;
 }
@@ -38,15 +39,13 @@
 }
 
 .trip-details__section.trip-details__section-passengers {
-  padding-bottom: 46px;
-  max-height: 196px;
+  padding-bottom: 22px;
 }
 
 .trip-details__section-header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 33px;
 }
 
 .trip-details__header-left {
@@ -107,9 +106,10 @@
    5. ВНУТРЕННИЙ КОНТЕНТ СЕКЦИЙ И СТРОКИ ИНФО
    ========================================================================== */
 .trip-details__section-content {
-  margin-top: 50px;
+  margin-top: 33px;
   display: flex;
   flex-direction: column;
+  height: auto;
 }
 
 .trip-details__info-row {
@@ -120,6 +120,10 @@
   font-size: 18px;
   color: rgba(229, 229, 229, 1);
   line-height: 1;
+}
+
+.trip-details__info-row:last-of-type {
+  margin-bottom: 0;
 }
 
 .trip-details__train-number {
@@ -149,8 +153,8 @@
   text-align: right;
   align-items: flex-end;
   font-size: 16px;
-  font-weight: 700;
   color: rgba(255, 255, 255, 1);
+  text-transform: capitalize;
 }
 
 /* Центральная колонка (время в пути + стрелочка) */
@@ -194,6 +198,7 @@
   font-size: 18px;
   font-weight: 400;
   margin-top: 20px;
+  text-transform: capitalize;
 }
 
 .trip-details__station {
@@ -206,7 +211,7 @@
    7. СТОИМОСТЬ И ФИНАЛЬНЫЙ БЛОК ИТОГО
    ========================================================================== */
 .trip-details__price-row {
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 700;
   color: #ffffff;
 }

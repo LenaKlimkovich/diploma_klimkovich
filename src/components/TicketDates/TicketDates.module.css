@@ -29,7 +29,6 @@
   width: 100%;
   height: 100%;
   position: relative;
-
   overflow: hidden;
 }
 
@@ -41,11 +40,9 @@
   text-align: left;
   padding-left: 22px;
   padding-right: 55px; /* Защита от наплывания текста на иконку календаря */
-
   font-size: 18px;
   font-weight: 400;
   color: rgba(41, 41, 41, 1);
-  box-sizing: border-box; /* Важно: паддинги не будут раздувать инпут шире 100% */
   overflow: hidden;
   border: 1px solid #e5e5e5;
   background-color: #ffffff;

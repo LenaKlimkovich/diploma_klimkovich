@@ -152,7 +152,6 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  flex: 1;
 }
 
 .passenger__label {
@@ -175,6 +174,10 @@
   height: 50px;
   width: 100%;
   white-space: pre-line;
+}
+
+.passenger__input {
+  max-width: 280px;
 }
 
 .passenger__input_wrapper {
@@ -205,9 +208,15 @@
   border: 1px solid rgba(146, 143, 148, 1);
   border-radius: 5px;
   margin-top: 10px;
+  text-transform: uppercase;
 }
 
-.passenger__input_short::placeholder {
+.passenger__input_short::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+.passenger__input_short::-webkit-datetime-edit-fields-wrapper {
   font-size: 18px;
   color: rgba(196, 196, 196, 1);
 }
@@ -254,7 +263,7 @@
   border: 1px solid rgba(146, 143, 148, 1);
   border-radius: 5px;
   overflow: hidden;
-  width: 100%;
+  width: 204px;
   height: 50px;
   margin-top: 10px;
 }
@@ -266,6 +275,7 @@
 .passenger__input_birth {
   display: flex;
   flex-direction: column;
+  justify-content: end;
 }
 
 .passenger__gender_btn {
